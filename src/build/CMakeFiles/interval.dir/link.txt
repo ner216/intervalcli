@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/interval.dir/Clock.cpp.o CMakeFiles/interval.dir/main.cpp.o -o interval 

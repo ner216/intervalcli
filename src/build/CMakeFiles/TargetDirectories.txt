@@ -1,0 +1,3 @@
+/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/build/CMakeFiles/interval.dir
+/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/build/CMakeFiles/edit_cache.dir
+/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/build/CMakeFiles/rebuild_cache.dir
