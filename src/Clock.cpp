@@ -65,7 +65,7 @@ void Clock::setAlarm(int h, int m, int s){
 	}
 }
 
-void Clock::countDown(){
+void Clock::countDown(bool Hour, bool Min){
 	bool alarm = false;
 
 	while (alarm == false){
@@ -80,22 +80,30 @@ void Clock::countDown(){
 			break;
 		}
 		system("clear");
-		print();
+		print(Hour, Min);
 		sleep(1.1);
 	}
 }
 
-void Clock::stopwatch(){
+void Clock::stopwatch(bool Hour, bool Min){
 	while (true){
 		incSec();
-		print();
+		print(Hour, Min);
 		sleep(1.1);
 		system("clear");
 	}
 }
 
-void Clock::print(){
-	cout << this->hour << ":" << this->min << ":" << this->sec << endl;
+void Clock::print(bool Hour, bool Min){
+	if (Min == true){
+		cout << "Time -> " << this->hour << ":" << this->min << endl; 
+	}
+	else if (Hour == true){
+		cout << "Time -> " << this->hour << endl;
+	}
+	else {
+		cout << "Time -> " << this->hour << ":" << this->min << ":" << this->sec << endl;
+	}
 }
 
 void Clock::incSec(){

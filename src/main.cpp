@@ -17,7 +17,10 @@ void help(){
 	cout << "Time Options: " << endl
 	<< " -m : minute" << endl
 	<< " -s : seconds" << endl
-	<< " -h : hours" << endl;
+	<< " -h : hours" << endl
+	<< " -DM : display values [hours][minutes]" << endl
+	<< " -DH : display values [hours]" << endl;
+	
 	
 	cout << "Misc Options: " << endl
 	<< " -v : verbose" << endl;
@@ -28,7 +31,7 @@ void help(){
 }
 
 void version(){
-	cout << "VERSION 1.0.0" << endl
+	cout << "VERSION 1.0.1" << endl
 	<< "Date Published: 8-17-24" << endl
 	<< "Publisher: Nolan Pro" << endl;
 }
@@ -81,6 +84,8 @@ int main(int argc, char *argv[]){
 	bool minOP = false;
 	bool secOP = false;
 	bool hourOP = false;
+	bool dispH = false;
+	bool dispM = false;
 	int minVal = 0;
 	int secVal = 0;
 	int hourVal = 0;
@@ -115,6 +120,12 @@ int main(int argc, char *argv[]){
 				if (argv[i][x] == 'h'){
 					hourOP = true;
 				}
+				if (argv[i][x] == 'D' && argv[i][x+1] == 'M'){
+					dispM = true;
+				}
+				if (argv[i][x] == 'D' && argv[i][x+1] == 'H'){
+					dispH = true;
+				}
 				if (isDigit(argv[i][x]) && secVal == 0 && minVal == 0 && hourVal == 0){
 					if (secOP == true){
 						secVal = charToInt(argv[i]);
@@ -139,10 +150,10 @@ int main(int argc, char *argv[]){
 		//check if mode arguments exist.
 		if (timer == true){
 			clock1.setAlarm(0,0,0);
-			clock1.countDown();
+			clock1.countDown(dispH, dispM);
 		}
 		if (stopwatch == true){
-			clock1.stopwatch();
+			clock1.stopwatch(dispH, dispM);
 		}
 	
 	} //closing bracket for parent if statement

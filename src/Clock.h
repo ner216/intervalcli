@@ -16,9 +16,9 @@ public:
 	//void playAlarm();
 	void incSec();
 	void decSec();
-	void print();
+	void print(bool=false, bool=false);
 	void setAlarm(int,int,int);
-	void countDown();
+	void countDown(bool,bool);
 	void setClock(int,int,int);
-	void stopwatch();
+	void stopwatch(bool,bool);
 };
