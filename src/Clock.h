@@ -21,4 +21,5 @@ public:
 	void countDown(bool,bool);
 	void setClock(int,int,int);
 	void stopwatch(bool,bool);
+	void playAlarm() const;
 };

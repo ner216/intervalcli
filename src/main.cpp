@@ -31,8 +31,9 @@ void help(){
 }
 
 void version(){
-	cout << "VERSION 1.0.1" << endl
-	<< "Date Published: 8-17-24" << endl
+	cout << "VERSION 1.0.2" << endl
+	<< "Date Originally Published: 8-17-24" << endl
+	<< "Date of most recent update: 8-19-24" << endl
 	<< "Publisher: Nolan Pro" << endl;
 }
 

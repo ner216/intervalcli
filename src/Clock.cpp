@@ -72,11 +72,11 @@ void Clock::countDown(bool Hour, bool Min){
 		decSec();
 		if (this->hour == this->Ahour && this->min == this->Amin && this->sec == this->Asec){
 			alarm = true;
-			//playAlarm();
 			if (this->verbose){
 				cout << "[v] -> Alarm time reached" << endl;
 			}
 			cout << "Time complete!" << endl;
+			playAlarm();
 			break;
 		}
 		system("clear");
@@ -134,4 +134,8 @@ void Clock::decSec(){
 		}
 	}
 	
+}
+
+void Clock::playAlarm() const{
+	system("mpg123 -q /usr/share/sounds/alsa/alarm.mp3");
 }
