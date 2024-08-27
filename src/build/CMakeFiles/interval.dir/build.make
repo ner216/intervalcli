@@ -69,10 +69,38 @@ include CMakeFiles/interval.dir/progress.make
 # Include the compile flags for this target's objects.
 include CMakeFiles/interval.dir/flags.make
 
+CMakeFiles/interval.dir/Convert.cpp.o: CMakeFiles/interval.dir/flags.make
+CMakeFiles/interval.dir/Convert.cpp.o: /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Convert.cpp
+CMakeFiles/interval.dir/Convert.cpp.o: CMakeFiles/interval.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/interval.dir/Convert.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/interval.dir/Convert.cpp.o -MF CMakeFiles/interval.dir/Convert.cpp.o.d -o CMakeFiles/interval.dir/Convert.cpp.o -c /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Convert.cpp
+
+CMakeFiles/interval.dir/Convert.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/interval.dir/Convert.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Convert.cpp > CMakeFiles/interval.dir/Convert.cpp.i
+
+CMakeFiles/interval.dir/Convert.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/interval.dir/Convert.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Convert.cpp -o CMakeFiles/interval.dir/Convert.cpp.s
+
+CMakeFiles/interval.dir/Config.cpp.o: CMakeFiles/interval.dir/flags.make
+CMakeFiles/interval.dir/Config.cpp.o: /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Config.cpp
+CMakeFiles/interval.dir/Config.cpp.o: CMakeFiles/interval.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/interval.dir/Config.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/interval.dir/Config.cpp.o -MF CMakeFiles/interval.dir/Config.cpp.o.d -o CMakeFiles/interval.dir/Config.cpp.o -c /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Config.cpp
+
+CMakeFiles/interval.dir/Config.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/interval.dir/Config.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Config.cpp > CMakeFiles/interval.dir/Config.cpp.i
+
+CMakeFiles/interval.dir/Config.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/interval.dir/Config.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Config.cpp -o CMakeFiles/interval.dir/Config.cpp.s
+
 CMakeFiles/interval.dir/Clock.cpp.o: CMakeFiles/interval.dir/flags.make
 CMakeFiles/interval.dir/Clock.cpp.o: /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Clock.cpp
 CMakeFiles/interval.dir/Clock.cpp.o: CMakeFiles/interval.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/interval.dir/Clock.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/interval.dir/Clock.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/interval.dir/Clock.cpp.o -MF CMakeFiles/interval.dir/Clock.cpp.o.d -o CMakeFiles/interval.dir/Clock.cpp.o -c /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Clock.cpp
 
 CMakeFiles/interval.dir/Clock.cpp.i: cmake_force
@@ -83,10 +111,24 @@ CMakeFiles/interval.dir/Clock.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/interval.dir/Clock.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Clock.cpp -o CMakeFiles/interval.dir/Clock.cpp.s
 
+CMakeFiles/interval.dir/interval.cpp.o: CMakeFiles/interval.dir/flags.make
+CMakeFiles/interval.dir/interval.cpp.o: /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/interval.cpp
+CMakeFiles/interval.dir/interval.cpp.o: CMakeFiles/interval.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/interval.dir/interval.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/interval.dir/interval.cpp.o -MF CMakeFiles/interval.dir/interval.cpp.o.d -o CMakeFiles/interval.dir/interval.cpp.o -c /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/interval.cpp
+
+CMakeFiles/interval.dir/interval.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/interval.dir/interval.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/interval.cpp > CMakeFiles/interval.dir/interval.cpp.i
+
+CMakeFiles/interval.dir/interval.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/interval.dir/interval.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/interval.cpp -o CMakeFiles/interval.dir/interval.cpp.s
+
 CMakeFiles/interval.dir/main.cpp.o: CMakeFiles/interval.dir/flags.make
 CMakeFiles/interval.dir/main.cpp.o: /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/main.cpp
 CMakeFiles/interval.dir/main.cpp.o: CMakeFiles/interval.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/interval.dir/main.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/interval.dir/main.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/interval.dir/main.cpp.o -MF CMakeFiles/interval.dir/main.cpp.o.d -o CMakeFiles/interval.dir/main.cpp.o -c /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/main.cpp
 
 CMakeFiles/interval.dir/main.cpp.i: cmake_force
@@ -99,17 +141,23 @@ CMakeFiles/interval.dir/main.cpp.s: cmake_force
 
 # Object files for target interval
 interval_OBJECTS = \
+"CMakeFiles/interval.dir/Convert.cpp.o" \
+"CMakeFiles/interval.dir/Config.cpp.o" \
 "CMakeFiles/interval.dir/Clock.cpp.o" \
+"CMakeFiles/interval.dir/interval.cpp.o" \
 "CMakeFiles/interval.dir/main.cpp.o"
 
 # External object files for target interval
 interval_EXTERNAL_OBJECTS =
 
+interval: CMakeFiles/interval.dir/Convert.cpp.o
+interval: CMakeFiles/interval.dir/Config.cpp.o
 interval: CMakeFiles/interval.dir/Clock.cpp.o
+interval: CMakeFiles/interval.dir/interval.cpp.o
 interval: CMakeFiles/interval.dir/main.cpp.o
 interval: CMakeFiles/interval.dir/build.make
 interval: CMakeFiles/interval.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Linking CXX executable interval"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable interval"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/interval.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

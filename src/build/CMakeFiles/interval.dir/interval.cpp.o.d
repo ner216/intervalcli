@@ -1,5 +1,5 @@
-CMakeFiles/interval.dir/main.cpp.o: \
- /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/main.cpp \
+CMakeFiles/interval.dir/interval.cpp.o: \
+ /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/interval.cpp \
  /usr/include/stdc-predef.h /usr/include/c++/14/iostream \
  /usr/include/c++/14/bits/requires_hosted.h \
  /usr/include/c++/14/x86_64-redhat-linux/bits/c++config.h \

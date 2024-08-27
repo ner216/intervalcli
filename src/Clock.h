@@ -1,25 +1,19 @@
 #include <iostream>
+#include "Convert.h"
 
 using namespace std;
 
-class Clock {
-private:
-	bool verbose;
+struct Clock {
 	int hour;
 	int min;
 	int sec;
-	int Ahour;
-	int Amin;
-	int Asec;
-public:
-	Clock(int=0,int=0,int=0,bool=false);
-	//void playAlarm();
+	char dayHalf;	//dayHalf can be '0' or 'A' or 'P'
+	
+	Clock(int h=0, int m=0, int s=0, char dayHalf='0');
+	void printTime(bool h=false, bool m=false);
 	void incSec();
 	void decSec();
-	void print(bool=false, bool=false);
-	void setAlarm(int,int,int);
-	void countDown(bool,bool);
-	void setClock(int,int,int);
-	void stopwatch(bool,bool);
-	void playAlarm() const;
+	bool operator==(Clock const& other);
+	void operator=(Clock &other);
+	double operator-(Clock const& other);
 };

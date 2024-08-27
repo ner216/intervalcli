@@ -9,6 +9,9 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Clock.cpp" "CMakeFiles/interval.dir/Clock.cpp.o" "gcc" "CMakeFiles/interval.dir/Clock.cpp.o.d"
+  "/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Config.cpp" "CMakeFiles/interval.dir/Config.cpp.o" "gcc" "CMakeFiles/interval.dir/Config.cpp.o.d"
+  "/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Convert.cpp" "CMakeFiles/interval.dir/Convert.cpp.o" "gcc" "CMakeFiles/interval.dir/Convert.cpp.o.d"
+  "/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/interval.cpp" "CMakeFiles/interval.dir/interval.cpp.o" "gcc" "CMakeFiles/interval.dir/interval.cpp.o.d"
   "/home/nolan/Nextcloud/C++_Files/IntervalAPP/src/main.cpp" "CMakeFiles/interval.dir/main.cpp.o" "gcc" "CMakeFiles/interval.dir/main.cpp.o.d"
   )
 

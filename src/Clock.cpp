@@ -1,109 +1,62 @@
+/*NOTES:
+remove/fix overload operators
+
+*/
 #include <iostream>
 #include "Clock.h"
-#include <unistd.h>
-
 using namespace std;
-
-Clock::Clock(int h, int m, int s, bool v){
-	this->verbose = v;
 	
-	if (h > 59){
-		cout << "Hour out of range: setting to 0" << endl;
-		this->hour = 0;
+Clock::Clock(int h, int m, int s, char dayHalf){
+	this->hour = h;
+	this->min = m;
+	this->sec = s;
+	this->dayHalf = dayHalf;
+}
+	
+void Clock::printTime(bool h, bool m){
+	cout << "Time -> ";
+
+	if (hour < 10){
+		cout << "0" << hour;
 	}
-	else {
-		this->hour = h;
-	}
-	if (m > 59){
-		cout << "Minute out of range: setting to 0" << endl;
-		this->min = 0;
-	}
-	else {
-		this->min = m;
-	}
-	if (s > 59){
-		cout << "Second out of range: setting to 0" << endl;
-		this->sec = 0;
-	}
-	else {
-		this->sec = s;
+	else{
+		cout << hour;
 	}
 	
-	if (this->verbose){
-		cout << "[v] -> Clock init Time: " << this->hour << ":" << this->min << ":" << this->sec << endl;
-	}
-
-}
-
-void Clock::setClock(int h, int m, int s){
-	if (h > 60 || m > 60 | s > 60){
-		cout << "Input time has values higher than 60" << endl;
-	}
-	else {
-		this->hour = h;
-		this->min = m;
-		this->sec = s;
-		if (this->verbose){
-			cout << "[v] -> Clock set successfully" << endl;
-			cout << "[v] -> Clock time: " << this->hour << ":" << this->min << ":" << this->sec << endl;
+	if (h == false){
+		cout << ":";
+		
+		if (min < 10){
+			cout << "0" << min;
+		}
+		else{
+			cout << min;
 		}
 	}
-}
-
-void Clock::setAlarm(int h, int m, int s){
-	if (h > 60 || m > 60 | s > 60){
-		cout << "Input time has values higher than 60" << endl;
-	}
-	else {
-		this->Ahour = h;
-		this->Amin = m;
-		this->Asec = s;
-		if (this->verbose) {
-			cout << "[v] -> Alarm set successfully" << endl;
-			cout << "[v] -> Alarm time: " << this->Ahour << ":" << this->Amin << ":" << this->Asec << endl;
+	
+	if (m == false){
+		cout << ":";
+		
+		if (sec < 10){
+			cout << "0" << sec;
+		}
+		else{
+			cout << sec;
 		}
 	}
-}
-
-void Clock::countDown(bool Hour, bool Min){
-	bool alarm = false;
-
-	while (alarm == false){
-		decSec();
-		if (this->hour == this->Ahour && this->min == this->Amin && this->sec == this->Asec){
-			alarm = true;
-			if (this->verbose){
-				cout << "[v] -> Alarm time reached" << endl;
-			}
-			cout << "Time complete!" << endl;
-			playAlarm();
-			break;
+	
+	cout << " ";
+	
+	if (dayHalf != '0'){
+		if (dayHalf == 'A'){
+			cout << "AM";
 		}
-		system("clear");
-		print(Hour, Min);
-		sleep(1.1);
+		if (dayHalf == 'P'){
+			cout << "PM";
+		}
 	}
-}
-
-void Clock::stopwatch(bool Hour, bool Min){
-	while (true){
-		incSec();
-		print(Hour, Min);
-		sleep(1.1);
-		system("clear");
-	}
-}
-
-void Clock::print(bool Hour, bool Min){
-	if (Min == true){
-		cout << "Time -> " << this->hour << ":" << this->min << endl; 
-	}
-	else if (Hour == true){
-		cout << "Time -> " << this->hour << endl;
-	}
-	else {
-		cout << "Time -> " << this->hour << ":" << this->min << ":" << this->sec << endl;
-	}
+	
+	cout << endl;
 }
 
 void Clock::incSec(){
@@ -136,6 +89,33 @@ void Clock::decSec(){
 	
 }
 
-void Clock::playAlarm() const{
-	system("mpg123 -q /usr/share/sounds/alsa/alarm.mp3");
+bool Clock::operator==(Clock const& other){
+	return (this->hour == other.hour && this->min == other.min && this->sec == other.sec && this->dayHalf == other.dayHalf);
 }
+	
+void Clock::operator=(Clock &other){
+	other.hour = this->hour;
+	other.min = this->min;
+	other.sec = this->sec;
+	other.dayHalf = this->dayHalf;
+}
+
+double Clock::operator-(Clock const& other){	//needs update for 12 hour clock
+	int result;
+	int dhour;
+	int dmin;
+	int dsec;
+	
+	//abs is absolute value function
+	dhour = abs(this->hour - other.hour);
+	dmin = abs(this->min - other.min);
+	dsec = abs(this->sec - other.sec);
+	
+	result = dhour - (dmin / 60) - (dsec / 3600);
+	
+	//cout << "OP -: " << "HOUR: " << dhour << " MIN: " << dmin << " SEC: " << dsec << " RESULT: " << result << endl;
+	return result;
+}
+
+
+

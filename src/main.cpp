@@ -1,5 +1,5 @@
 #include <iostream>
-#include "Clock.h"
+#include "interval.h"
 
 void help(){
 	cout << "Order of options is not mandatory and not all option fields are required." << endl
@@ -8,11 +8,14 @@ void help(){
 	
 	cout << "MonoArgument Commands: " << endl
 	<< " [COMMAND] version : version and publish information" << endl
-	<< " [COMMAND] help : basic commands and usage" << endl;
+	<< " [COMMAND] help : basic commands and usage" << endl
+	<< " [COMMAND] config: edit config file" << endl;
 	
+	cout << "PolyArgument Commands: " << endl;
 	cout << "Modes: " << endl;
 	cout << " -t : timer" << endl
-	<< " -w : stopwatch" << endl;
+	<< " -w : stopwatch" << endl
+	<< " -a : Alarm" << endl;
 	
 	cout << "Time Options: " << endl
 	<< " -m : minute" << endl
@@ -31,56 +34,46 @@ void help(){
 }
 
 void version(){
-	cout << "VERSION 1.0.2" << endl
+	cout << "VERSION 1.3.0" << endl
 	<< "Date Originally Published: 8-17-24" << endl
-	<< "Date of most recent update: 8-19-24" << endl
+	<< "Date of most recent update: 8-26-24" << endl
 	<< "Publisher: Nolan Pro" << endl;
 }
 
-bool isDigit(char val){
-	char digits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-	for (int i = 0; i < 10; i++){
-		if (digits[i] == val){
-			return true;
-		}
-	}
-	
-	return false;
-}
-
-int powTen(int n){
-	int result = 1;
-	
-	for (int i = 0; i < n; i++){
-		result = result * 10;
-	}
-	
-	return result;
-}
-
-int charToInt(char val[]){
-	char digits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-	int result = 0;	
-	int power = 0;
-	
-	for (int i = sizeof(&val)/sizeof(char); i >= 0 ; i--){
-		for (int y = 0; y < 10; y++){
-			if (val[i] == digits[y]){
-				result = result + (y * powTen(power));
-				power++;
-			}
-		}
-	}
-	
-	return result;
-}
 
 //argc is length of argv array; 0 is the name of program
 //if the program is acompanied by arguments, they are looped through.
 //boolean switches are used to store the state of arguments.
 int main(int argc, char *argv[]){
+	//initialize the variables from config file
+	const int TotalConfLines = 8;
+	int counter = 0;
+	string line;
+	string options[] = {"","","",""};
+
+	ifstream config("/etc/IntervalConfig.conf");
+
+	if (config.is_open()){
+		for (int i = 0; i < TotalConfLines; i++){
+			getline(config, line);
+			//use modulus to skip lines that contain labels:
+			if (i % 2 != 0){
+				options[counter] = line;
+				counter++;
+			}
+		}
+	}
+	//config variable alias setup:
+	string timeZone = options[0];
+	string soundDir = options[1];
+	string worldClock = options[2];
+	string editor = options[3];
+	
+	//initialize switch variables
+	bool editConfig = false;
 	bool verbose = false;
 	bool timer = false;
+	bool alarm = false;
 	bool stopwatch = false;
 	bool minOP = false;
 	bool secOP = false;
@@ -103,8 +96,15 @@ int main(int argc, char *argv[]){
 					version();
 					return 0;
 				}
+				if (argv[i][x] == 'c' && argv[i][x+1] == 'o' && argv[i][x+2] == 'n' && argv[i][x+3] == 'f'){
+					editConfig = true;
+					break;
+				}
 				if (argv[i][x] == 'v'){
 					verbose = true;
+				}
+				if (argv[i][x] == 'a'){
+					alarm = true;
 				}
 				if (argv[i][x] == 'w'){
 					stopwatch = true;
@@ -138,7 +138,7 @@ int main(int argc, char *argv[]){
 						hourVal = charToInt(argv[i]);
 					}
 					else {
-						cout << "Error: Invalid arguments or argument order" << endl;
+						cerr << "Error: Invalid arguments or argument order" << endl;
 						return 1;
 					}
 				}
@@ -147,14 +147,34 @@ int main(int argc, char *argv[]){
 		}
 		
 		//create Clock object using argument values:
-		Clock clock1 = Clock(hourVal, minVal, secVal, verbose);
+		interval clock1 = interval(0, 0, 0, editConfig, verbose);
+		
 		//check if mode arguments exist.
 		if (timer == true){
+			clock1.setClock(hourVal, minVal, secVal);
 			clock1.setAlarm(0,0,0);
 			clock1.countDown(dispH, dispM);
 		}
 		if (stopwatch == true){
+			clock1.setClock(hourVal, minVal, secVal);
 			clock1.stopwatch(dispH, dispM);
+		}
+		if (alarm == true){
+			clock1.syncClock();
+			cout << "Enter alarm time(hr min) >";
+			cin >> hourVal;
+			cin >> minVal;
+			if (verbose){
+				cout << "HOURVAL: " << hourVal << endl;
+				cout << "MINVAL: " << minVal << endl;
+			}
+			if (hourVal >= 0 && hourVal < 24 && minVal >= 0 && minVal < 60){
+				clock1.setAlarm(hourVal,minVal,0);
+				clock1.runAlarm();
+			}
+			else {
+				cerr << "Error: invalid input time [main]" << endl;
+			}
 		}
 	
 	} //closing bracket for parent if statement

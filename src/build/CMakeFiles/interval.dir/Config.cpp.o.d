@@ -1,5 +1,5 @@
-CMakeFiles/interval.dir/main.cpp.o: \
- /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/main.cpp \
+CMakeFiles/interval.dir/Config.cpp.o: \
+ /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Config.cpp \
  /usr/include/stdc-predef.h /usr/include/c++/14/iostream \
  /usr/include/c++/14/bits/requires_hosted.h \
  /usr/include/c++/14/x86_64-redhat-linux/bits/c++config.h \
@@ -129,15 +129,8 @@ CMakeFiles/interval.dir/main.cpp.o: \
  /usr/include/c++/14/bits/basic_ios.tcc \
  /usr/include/c++/14/bits/ostream.tcc /usr/include/c++/14/istream \
  /usr/include/c++/14/bits/istream.tcc \
- /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/interval.h \
- /usr/include/unistd.h /usr/include/bits/posix_opt.h \
- /usr/include/bits/environments.h /usr/include/bits/confname.h \
- /usr/include/bits/getopt_posix.h /usr/include/bits/getopt_core.h \
- /usr/include/bits/unistd_ext.h /usr/include/linux/close_range.h \
+ /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Config.h \
  /usr/include/c++/14/fstream /usr/include/c++/14/bits/codecvt.h \
  /usr/include/c++/14/x86_64-redhat-linux/bits/basic_file.h \
  /usr/include/c++/14/x86_64-redhat-linux/bits/c++io.h \
- /usr/include/c++/14/bits/fstream.tcc \
- /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Clock.h \
- /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Convert.h \
- /home/nolan/Nextcloud/C++_Files/IntervalAPP/src/Config.h
+ /usr/include/c++/14/bits/fstream.tcc
