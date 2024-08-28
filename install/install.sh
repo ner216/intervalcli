@@ -112,7 +112,7 @@ if [ $cancel == true ]; then
 fi
 
 
-if [ $(id -u) -ne 0 ]; then
+if [ $(id -u) == 0 ]; then
 	if [ $uninstall == true ]; then
 		read -p "Remove package dependancies [mpg123] (y,N)> " choice
 		if [ $choice == 'y' ]; then
