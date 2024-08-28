@@ -137,7 +137,7 @@ if [ $(id -u) -ne 0 ]; then
 		if [ $release == "ID=fedora" ]; then
 			installDepDNF
 			installBin
-		elif [ $release == "ID=debian"]; then
+		elif [ $release == "ID=debian" ]; then
 			installDepAPT
 			installBin
 		else
