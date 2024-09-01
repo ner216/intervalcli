@@ -1,0 +1,13 @@
+[TimeZone]
+EDT
+[SoundDir]
+/usr/share/sounds/alsa/alarm.mp3
+[24HourClock]
+true
+[Editor]
+nano
+
+
+#Do not add or remove lines in this file!
+#Supported Time Zones: EST, EDT, CST, CDT, MST, MDT, PST, PDT
+

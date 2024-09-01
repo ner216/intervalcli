@@ -46,7 +46,7 @@ void repair(){
 	}
 	catch (std::filesystem::__cxx11::filesystem_error) {
 		std::cerr << "Error: Old config file could not be deleted! run as root?" << std::endl;
-		exit(3);
+		exit(2);
 	}
 	
 	
@@ -213,6 +213,7 @@ int main(int argc, char *argv[]){
 			}
 			else {
 				std::cerr << "Error: invalid input time [main]" << std::endl;
+				return 1;
 			}
 		}
 	

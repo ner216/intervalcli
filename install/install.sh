@@ -42,7 +42,7 @@ installBin(){
 			sudo rm $configFile
 		else 
 			echo "Config file error: Setup closing"
-			exit 1
+			exit 2
 		fi
 	fi
 	printf 'Creating Config in /etc/IntervalConfig.conf\n'
@@ -133,7 +133,7 @@ if [ $(id -u) == 0 ]; then
 				apt remove mpg123
 			else
 				echo "Error: unknown distrobution! exiting!"
-				exit 1
+				exit 3
 			fi
 		fi
 		
