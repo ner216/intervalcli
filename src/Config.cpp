@@ -2,22 +2,20 @@
 #include <filesystem>
 #include "Config.h"
 
-using namespace std;
-
-Config::Config(string configPath){
+Config::Config(std::string configPath){
 	const int TotalConfLines = 8;
-	bool configError = false;
-	int counter = 0;
-	string line;
-	string soundCommand = "mpg123 -q ";
-	string options[] = {"","","",""};
+	bool configError = false;		//flag is switched if field checks below fail.
+	int counter = 0;	//used to determine the odd number lines in config file.
+	std::string line;
+	std::string soundCommand = "mpg123 -q ";
+	std::string options[] = {"","","",""};
 	
 	//open config file:
-	ifstream config(configPath);
+	std::ifstream config(configPath);
 	//copy odd # lines to options array (config values):
 	if (config.is_open()){
 		for (int i = 0; i < TotalConfLines; i++){
-			getline(config, line);
+			std::getline(config, line);
 			if (i % 2 != 0){
 				options[counter] = line;
 				counter++;
@@ -25,7 +23,7 @@ Config::Config(string configPath){
 		}
 	}
 	else {
-		cerr << "Error: config file could not be opened [Config::Config]" << endl;
+		std::cerr << "Error [1]: config file could not be opened [Config::Config]" << std::endl;
 		std::exit(1);
 	}
 	config.close();
@@ -46,7 +44,7 @@ Config::Config(string configPath){
 	std::filesystem::path p4("/usr/local/sbin/" + editorName);
 	
 	//check if values in config file are testable:
-	if (worldClock != "true" && worldClock != "false"){
+	if (this->worldClock != "true" && this->worldClock != "false"){
 		configError = true;
 	}
 	if (ConvertLib::timeMod(timeZone) == 0){
@@ -60,7 +58,8 @@ Config::Config(string configPath){
 	}
 	//exit program if configError flag is true:
 	if (configError == true){
-		cerr << "Error: Config file options are invalid! Use: [intervalcli repair] to replace config!" << endl;
+		std::cerr << "Error [2]: Config file options are invalid! Use: 'intervalcli repair' to replace config!" << std::endl
+		<< "To modify manually: use: '[editor] /etc/IntervalConfig.conf' " << std::endl;
 		std::exit(2);
 	}
 	

@@ -1,8 +1,5 @@
 #include <iostream>
 
-
-using namespace std;
-
 struct Clock {
 	int hour;
 	int min;

@@ -1,33 +1,22 @@
-//Notes::
-/*
-Improve runAlarm function to be more accurate.
-
-*/
 #include <iostream>
 #include "interval.h"
 
 
-using namespace std;
-
 interval::interval(int h, int m, int s, bool editConfig, bool verbose){
 	//initialize pointer members for composition of structs
-	currClock = new Clock();
-	alarmClock = new Clock();
-	config = new Config();
+	this->currClock = new Clock();
+	this->alarmClock = new Clock();
+	this->config = new Config();
 	this->verbose = verbose;
-	/*WHY DOES THIS NOT WORK
-	if (config->worldClock == "true"){
-		this->worldClock == true;
-	}
-	*/
+	
 	if (editConfig == true){
-		system(config->editor.c_str());
+		std::system(config->editor.c_str());
 	}
 	else {
-		setClock(h, m, s);
+		interval::setClock(h, m, s);
 	
 		if (verbose == true){
-			cout << "[v] -> Running in Verbose Mode [interval::interval]" << endl;
+			std::cout << "[v] -> Running in Verbose Mode [interval::interval]" << std::endl;
 		}
 	}
 }
@@ -38,33 +27,42 @@ interval::~interval(){
 	delete this->config;
 	
 	if (this->verbose){
-		cout << "[v] -> interval pointers deleted [interval::~interval]" << endl;
+		std::cout << "[v] -> interval pointers deleted [interval::~interval]" << std::endl;
 	}
 }
 
 void interval::setClock(int h, int m, int s, char dayHalf){
+	bool validInput = false;	//flag is switched when input is varified
+
 	if (dayHalf != '0'){
-	//configure 12hour clock
+		if (h < 13 && h > 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
+			validInput = true;
+		}
 	}
 	else {
 		if (h < 24 && m < 60 && s < 60){
-			currClock->hour = h;
-			currClock->min = m;
-			currClock->sec = s;
-			currClock->dayHalf = dayHalf;
-			if (this->verbose){
-				cout << "[v] -> Clock time set successfully [interval::interval]" << endl;
-				cout << "[v] -> Hour: " << h << " Min: " << m << " Sec: " << s << " DayHalf: " << dayHalf << " [interval::setClock]" << endl;
-			}
-		}
-		else {
-			cerr << "Error: Invalid time input out of range" << endl;
+			validInput = true;
 		}
 	}
 	
+	if (validInput == true){
+		this->currClock->hour = h;
+		this->currClock->min = m;
+		this->currClock->sec = s;
+		this->currClock->dayHalf = dayHalf;
+		if (this->verbose){
+			std::cout << "[v] -> Clock time set successfully [interval::interval]" << std::endl;
+			std::cout << "[v] -> Hour: " << h << " Min: " << m << " Sec: " << s << " DayHalf: " << dayHalf << " [interval::setClock]" << std::endl;
+		}
+	}
+	else {
+		std::cerr << "Error [4]: Input time is invalid" << std::endl;
+		std::exit(4);
+	}
 }
 
 void interval::syncClock(char dayHalf){	//make adjustments later for time zone
+	//used by time library to return a time struct:
 	struct tm * ptm;
 	time_t curTime;
 	time_t rawTime;
@@ -73,52 +71,48 @@ void interval::syncClock(char dayHalf){	//make adjustments later for time zone
 	ptm = gmtime(&rawTime);
 	
 	if (dayHalf == '0'){
-		currClock->hour = (ptm->tm_hour + ConvertLib::timeMod(config->timeZone)); //uses function from convert library - returns time zone modifier
-		if (currClock->hour < 0){
-			currClock->hour = currClock->hour + 24;
+		this->currClock->hour = (ptm->tm_hour + ConvertLib::timeMod(config->timeZone)); //uses function from convert library - returns time zone modifier
+		if (this->currClock->hour < 0){
+			this->currClock->hour = this->currClock->hour + 24;
 		}
-		currClock->min = ptm->tm_min;
-		currClock->sec = ptm->tm_sec;
+		this->currClock->min = ptm->tm_min;
+		this->currClock->sec = ptm->tm_sec;
 	}
 	
 	if (this->verbose){
-		cout << "[v] -> Set current clock time [interval::syncClock] ";
-		currClock->printTime();
+		std::cout << "[v] -> Set current clock time [interval::syncClock] ";
+		this->currClock->printTime();
 	}
 }
 
 void interval::setAlarm(int h, int m, int s, char dayHalf){		//dayHalf can be 'A' or 'P'
-	if (config->worldClock == "true"){
+	bool validInput = false;	//flag switched when input is validated.
+	
+	if (this->config->worldClock == "true"){
 		if (h < 24 && m < 60 && s < 60){
-			alarmClock->hour = h;
-			alarmClock->min = m;
-			alarmClock->sec = s;
-			alarmClock->dayHalf = dayHalf;
-			if (this->verbose){
-				cout << "[v] -> Alarm time set successfully [interval::setAlarm]" << endl;
-				cout << "[v] -> Hour: " << h << " Min: " << m << " Sec: " << s << " DayHalf: " << dayHalf << " [interval::setAlarm]" << endl;
-			}
-		}
-		else{
-			cerr << "Error: invalid input alarm time [interval::setAlarm] [24HOUR]" << endl;
+			validInput = true;
 		}
 	}
 	else {
 		if (h < 13 && h > 0 && m < 60 && s < 60){
-			alarmClock->hour = h;
-			alarmClock->min = m;
-			alarmClock->sec = s;
-			alarmClock->dayHalf = dayHalf;
-			if (this->verbose){
-				cout << "[v] -> Alarm time set successfully [interval::setAlarm]" << endl;
-				cout << "[v] -> Hour: " << h << " Min: " << m << " Sec: " << s << " DayHalf: " << dayHalf << " [interval::setAlarm]" << endl;
-			}
-		}
-		else{
-			cout << "Error: invalid input alarm time [interval::setAlarm] [12HOUR]" << endl;
+			validInput = true;
 		}
 	}
-			
+	
+	if (validInput == true){
+		this->alarmClock->hour = h;
+		this->alarmClock->min = m;
+		this->alarmClock->sec = s;
+		this->alarmClock->dayHalf = dayHalf;
+		if (this->verbose){
+			std::cout << "[v] -> Alarm time set successfully [interval::setAlarm]" << std::endl;
+			std::cout << "[v] -> Hour: " << h << " Min: " << m << " Sec: " << s << " DayHalf: " << dayHalf << " [interval::setAlarm]" << std::endl;
+		}
+	}
+	else {
+		std::cerr << "Error [4]: Input time is invalid" << std::endl;
+		std::exit(4);
+	}	
 }
 
 void interval::runAlarm(){
@@ -128,9 +122,9 @@ void interval::runAlarm(){
 		if (this->verbose == false){
 			system("clear");
 		}
-		cout << "Current ";
+		std::cout << "Current ";
 		currClock->printTime();
-		cout << "Alarm ";
+		std::cout << "Alarm ";
 		alarmClock->printTime();
 		
 		//get difference values by subtracting struct members
@@ -141,13 +135,13 @@ void interval::runAlarm(){
 		if (diffH == 0){
 			if (diffM == 0){
 				if (diffS == 0 || diffS == 1){
-					cout << "Alarm time reached" << endl;
+					std::cout << "Alarm time reached" << std::endl;
 					playAlarm();
 					break;
 				}
 			}
 		}
-		syncClock();
+		interval::syncClock();
 		sleep(1);
 	}
 }
@@ -160,32 +154,31 @@ void interval::countDown(bool Hour, bool Min){
 	bool alarm = false;
 
 	while (alarm == false){
-		currClock->decSec();
+		this->currClock->decSec();
 		if (*alarmClock == *currClock){
 			alarm = true;
 			if (this->verbose){
-				cout << "[v] -> Alarm time reached [interval::countDown]" << endl;
+				std::cout << "[v] -> Alarm time reached [interval::countDown]" << std::endl;
 			}
-			cout << "Time complete!" << endl;
-			playAlarm();
+			std::cout << "Time complete!" << std::endl;
+			interval::playAlarm();
 			break;
 		}
 		if (this->verbose == false){
-			system("clear");
+			std::system("clear");
 		}
-		currClock->printTime(Hour, Min);
+		this->currClock->printTime(Hour, Min);
 		sleep(1.1);
 	}
 }
 
 void interval::stopwatch(bool Hour, bool Min){
-	
 	while (true){
-		currClock->incSec();
-		currClock->printTime(Hour, Min);
+		this->currClock->incSec();
+		this->currClock->printTime(Hour, Min);
 		sleep(1.1);
 		if (this->verbose == false){
-			system("clear");
+			std::system("clear");
 		}
 	}
 }
@@ -193,5 +186,5 @@ void interval::stopwatch(bool Hour, bool Min){
 
 
 void interval::playAlarm() const{
-	system(config->soundDir.c_str());
+	std::system(config->soundDir.c_str());
 }

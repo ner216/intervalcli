@@ -1,5 +1,13 @@
 tasks:
-	clean up code
+	clean up code.
+	
+	add try catch when needed:
+		deleting config file in main.
+		
+	Improve alarm function to be more accurate.
+	
+	Finish Clock overload operators
+	
 
 known issues:
 	displays 'am' or 'pm' in alarm when clock is in 24H mode

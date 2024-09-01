@@ -11,7 +11,7 @@ namespace ConvertLib {
 	char intToChar(int num);
 	int abs(int num);
 	int timeMod(std::string);
-	bool checkExistance(const std::filesystem::path& p, std::filesystem::file_status s = std::filesystem::file_status{});
+	bool checkExistance(const std::filesystem::path& p);
 	
 }
 

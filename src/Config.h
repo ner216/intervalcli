@@ -3,13 +3,11 @@
 #include <fstream>
 #include "Libraries/ConvertLib.h"
 
-using namespace std;
-
 struct Config {
-	string timeZone;
-	string soundDir;
-	string worldClock;
-	string editor;
+	std::string timeZone;
+	std::string soundDir;
+	std::string worldClock;
+	std::string editor;
 	
-	Config(string configPath="/etc/IntervalConfig.conf");
+	Config(std::string configPath="/etc/IntervalConfig.conf");
 };

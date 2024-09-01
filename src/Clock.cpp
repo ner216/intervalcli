@@ -1,10 +1,5 @@
-/*NOTES:
-remove/fix overload operators
-
-*/
 #include <iostream>
 #include "Clock.h"
-using namespace std;
 	
 Clock::Clock(int h, int m, int s, char dayHalf){
 	this->hour = h;
@@ -14,49 +9,49 @@ Clock::Clock(int h, int m, int s, char dayHalf){
 }
 	
 void Clock::printTime(bool h, bool m){
-	cout << "Time -> ";
+	std::cout << "Time -> ";
 
 	if (hour < 10){
-		cout << "0" << hour;
+		std::cout << "0" << hour;
 	}
 	else{
-		cout << hour;
+		std::cout << hour;
 	}
 	
 	if (h == false){
-		cout << ":";
+		std::cout << ":";
 		
 		if (min < 10){
-			cout << "0" << min;
+			std::cout << "0" << min;
 		}
 		else{
-			cout << min;
+			std::cout << min;
 		}
 	}
 	
 	if (m == false){
-		cout << ":";
+		std::cout << ":";
 		
 		if (sec < 10){
-			cout << "0" << sec;
+			std::cout << "0" << sec;
 		}
 		else{
-			cout << sec;
+			std::cout << sec;
 		}
 	}
 	
-	cout << " ";
+	std::cout << " ";
 	
 	if (dayHalf != '0'){
 		if (dayHalf == 'A'){
-			cout << "AM";
+			std::cout << "AM";
 		}
 		if (dayHalf == 'P'){
-			cout << "PM";
+			std::cout << "PM";
 		}
 	}
 	
-	cout << endl;
+	std::cout << std::endl;
 }
 
 void Clock::incSec(){
@@ -107,13 +102,13 @@ double Clock::operator-(Clock const& other){	//needs update for 12 hour clock
 	int dsec;
 	
 	//abs is absolute value function
-	dhour = abs(this->hour - other.hour);
+	dhour = abs(this->hour - other.hour);	//abs() is from ConvertLib namespace
 	dmin = abs(this->min - other.min);
 	dsec = abs(this->sec - other.sec);
 	
 	result = dhour - (dmin / 60) - (dsec / 3600);
 	
-	//cout << "OP -: " << "HOUR: " << dhour << " MIN: " << dmin << " SEC: " << dsec << " RESULT: " << result << endl;
+	//std::cout << "OP -: " << "HOUR: " << dhour << " MIN: " << dmin << " SEC: " << dsec << " RESULT: " << result << std::endl;
 	return result;
 }
 

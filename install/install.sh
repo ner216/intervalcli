@@ -1,5 +1,5 @@
 #!/bin/bash
-srcFile="interval"
+srcFile="intervalcli"
 configFile="/etc/IntervalConfig.conf"
 alarmFile="alarm.mp3"
 #flag variables for installCheck
@@ -22,8 +22,11 @@ installBin(){
 	#copy files from download to respective places
 	printf 'Copying files...\n'
 	cd ..
-	cd src/build/
+	cd src/
+	mkdir build
+	cd build/
 	#rebuild the project for the system:
+	cmake ..
 	cmake --build .
 	#copy binary to bin:
 	cp $srcFile /usr/bin/
@@ -33,7 +36,8 @@ installBin(){
 
 	#create config file
 	if [ -f $configFile ]; then
-		read -p "Warning: IntervalConfig.conf present! File must be deleted to continue. Would you like to delete it? (y/N) " choice
+		printf "Warning: IntervalConfig.conf present! File must be deleted to continue.\n"
+		read -p "Would you like to delete it? (y/N) " choice
 		if [ $choice == "y" ]; then
 			sudo rm $configFile
 		else 
@@ -50,6 +54,10 @@ installBin(){
 	sudo echo "true" >> /etc/IntervalConfig.conf
 	sudo echo "[Editor]" >> /etc/IntervalConfig.conf
 	sudo echo "nano" >> /etc/IntervalConfig.conf
+	sudo echo >> /etc/IntervalConfig.conf
+	sudo echo >> /etc/IntervalConfig.conf
+	sudo echo "#Do not add or remove lines in this file!" >> /etc/IntervalConfig.conf
+	sudo echo "#Supported Time Zones: EST, EDT, CST, CDT, MST, MDT, PST, PDT" >> /etc/IntervalConfig.conf
 	
 	printf 'done\n'
 }
@@ -94,7 +102,7 @@ installCheck(){
 			cancel=true
 		fi
 	else
-		read -p "Install interval with dependancies [mpg123, CMAKE, g++, gcc]? (y/N)> " choice
+		read -p "Install intervalcli? (y/N)> " choice
 		if [ $choice == 'y' ]; then
 			install=true
 		else
@@ -104,6 +112,7 @@ installCheck(){
 }
 
 #check for install files
+printf "Warning: Installer/Uninstaller does not check for dependancy parents or file identity, \ncontinue at your own risk!\n\n"
 installCheck
 
 if [ $cancel == true ]; then
@@ -114,11 +123,13 @@ fi
 
 if [ $(id -u) == 0 ]; then
 	if [ $uninstall == true ]; then
-		read -p "Remove package dependancies [mpg123] (y,N)> " choice
+		printf "This action will: \n"
+		printf "  Delete mpg123\n  Delete $configFile\n  Delete /usr/share/sounds/alsa/$alarmFile\n  Delete /usr/bin/$srcFile\n"
+		read -p "Proceed? (y,N)> " choice
 		if [ $choice == 'y' ]; then
 			if [ $release == "ID=fedora" ]; then
 				dnf remove mpg123
-			elif [ $release == "ID=debian" ]; then
+			elif [ $release == "ID=debian" ]||[ $release == "ID=linuxmint" ]||[ $release == "ID=ubuntu" ]; then
 				apt remove mpg123
 			else
 				echo "Error: unknown distrobution! exiting!"
@@ -134,14 +145,20 @@ if [ $(id -u) == 0 ]; then
 		rm /usr/bin/$srcFile
 		echo "Done"
 	elif [ $install == true ]; then
-		if [ $release == "ID=fedora" ]; then
-			installDepDNF
-			installBin
-		elif [ $release == "ID=debian" ]||[ $release == "ID=linuxmint" ]; then
-			installDepAPT
-			installBin
-		else
-			printf 'Unsupported OS\n'
+		printf "This action will: \n"
+		printf "  Install $configFile\n  Install /usr/share/sounds/alsa/$alarmFile\n  Install /usr/bin/$srcFile\n"
+		printf "  Install mpg123\n  Install CMAKE\n  Install Make\n  Install g++\n  Install gcc\n"
+		read -p "Proceed? (y,N)> " choice
+		if [ $choice == 'y' ]; then
+			if [ $release == "ID=fedora" ]; then
+				installDepDNF
+				installBin
+			elif [ $release == "ID=debian" ]||[ $release == "ID=linuxmint" ]||[ $release == "ID=ubuntu" ]; then
+				installDepAPT
+				installBin
+			else
+				printf 'Unsupported OS\n'
+			fi
 		fi
 	printf 'Goodbye!\n'
 	exit 0

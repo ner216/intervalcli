@@ -6,8 +6,6 @@
 #include "Clock.h"
 #include "Config.h"
 
-using namespace std;
-
 class interval {
 private:
 	bool verbose;
@@ -19,7 +17,7 @@ public:
 	//clock refers to running clock displayed; alarm refers to end point for clock.
 	interval(int h=0,int m=0,int s=0,bool editConfig=false,bool verbose=false);
 	~interval();
-	string getOptionStr(string);
+	std::string getOptionStr(std::string);
 	void print(bool=false, bool=false);
 	void setAlarm(int,int,int,char='0');
 	void runAlarm();
