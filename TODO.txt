@@ -1,0 +1,7 @@
+tasks:
+	clean up code
+
+known issues:
+	displays 'am' or 'pm' in alarm when clock is in 24H mode
+	
+

@@ -9,7 +9,8 @@ void help(){
 	cout << "MonoArgument Commands: " << endl
 	<< " [COMMAND] version : version and publish information" << endl
 	<< " [COMMAND] help : basic commands and usage" << endl
-	<< " [COMMAND] config: edit config file" << endl;
+	<< " [COMMAND] config: edit config file" << endl
+	<< " [COMMAND] gui: run application gui" << endl;
 	
 	cout << "PolyArgument Commands: " << endl;
 	cout << "Modes: " << endl;
@@ -31,6 +32,12 @@ void help(){
 	cout << "Usage Examples: " << endl;
 	cout << " [COMMAND] -[MODE] -[TIME_OPTION] -[MISC_OPTION] [TIMEVALUE]" << endl
 	<< " EX: [COMMAND] -t -m 40" << endl;
+}
+
+void errorCodes(){
+	cout << "Error Codes:" << endl
+	<< "1 : Unable to open configuration file." << endl
+	<< "2 : Values in config file are not valid." << endl;
 }
 
 void version(){
@@ -127,15 +134,15 @@ int main(int argc, char *argv[]){
 				if (argv[i][x] == 'D' && argv[i][x+1] == 'H'){
 					dispH = true;
 				}
-				if (isDigit(argv[i][x]) && secVal == 0 && minVal == 0 && hourVal == 0){
+				if (ConvertLib::isDigit(argv[i][x]) && secVal == 0 && minVal == 0 && hourVal == 0){
 					if (secOP == true){
-						secVal = charToInt(argv[i]);
+						secVal = ConvertLib::charToInt(argv[i]);
 					}
 					else if (minOP == true){
-						minVal = charToInt(argv[i]);
+						minVal = ConvertLib::charToInt(argv[i]);
 					}
 					else if (hourOP == true){
-						hourVal = charToInt(argv[i]);
+						hourVal = ConvertLib::charToInt(argv[i]);
 					}
 					else {
 						cerr << "Error: Invalid arguments or argument order" << endl;
@@ -146,20 +153,23 @@ int main(int argc, char *argv[]){
 		//bracket to close for loop
 		}
 		
+		
 		//create Clock object using argument values:
 		interval clock1 = interval(0, 0, 0, editConfig, verbose);
+
 		
 		//check if mode arguments exist.
+		
 		if (timer == true){
 			clock1.setClock(hourVal, minVal, secVal);
 			clock1.setAlarm(0,0,0);
 			clock1.countDown(dispH, dispM);
 		}
-		if (stopwatch == true){
+		else if (stopwatch == true){
 			clock1.setClock(hourVal, minVal, secVal);
 			clock1.stopwatch(dispH, dispM);
 		}
-		if (alarm == true){
+		else if (alarm == true){
 			clock1.syncClock();
 			cout << "Enter alarm time(hr min) >";
 			cin >> hourVal;

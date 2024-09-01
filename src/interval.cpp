@@ -73,7 +73,7 @@ void interval::syncClock(char dayHalf){	//make adjustments later for time zone
 	ptm = gmtime(&rawTime);
 	
 	if (dayHalf == '0'){
-		currClock->hour = (ptm->tm_hour + timeMod(config->timeZone)); //uses function from convert library - returns time zone modifier
+		currClock->hour = (ptm->tm_hour + ConvertLib::timeMod(config->timeZone)); //uses function from convert library - returns time zone modifier
 		if (currClock->hour < 0){
 			currClock->hour = currClock->hour + 24;
 		}

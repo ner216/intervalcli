@@ -43,7 +43,7 @@ installBin(){
 	fi
 	printf 'Creating Config in /etc/IntervalConfig.conf\n'
 	sudo echo "[TimeZone]" >> /etc/IntervalConfig.conf
-	sudo echo "EST" >> /etc/IntervalConfig.conf
+	sudo echo "EDT" >> /etc/IntervalConfig.conf
 	sudo echo "[SoundDir]" >> /etc/IntervalConfig.conf
 	sudo echo "/usr/share/sounds/alsa/alarm.mp3" >> /etc/IntervalConfig.conf
 	sudo echo "[24HourClock]" >> /etc/IntervalConfig.conf
@@ -58,8 +58,8 @@ installDepDNF(){
 	#install dependancies
 	printf 'Updating repos...\n'
 	dnf update
-	printf 'Installing [mpg123,CMAKE,g++]...\n'
-	dnf install mpg123 cmake g++
+	printf 'Installing [mpg123,CMAKE,g++,gcc]...\n'
+	dnf install mpg123 cmake g++ gcc
 
 }
 
@@ -67,8 +67,8 @@ installDepAPT(){
 	printf 'Updating repos...\n'
 	apt update
 	apt upgrade
-	printf 'Installing [mpg123,CMAKE,g++]...\n'
-	apt install mpg123 cmake g++
+	printf 'Installing [mpg123,CMAKE,g++,gcc]...\n'
+	apt install mpg123 cmake g++ gcc
 
 }
 
@@ -83,18 +83,18 @@ installCheck(){
 	
 	if [ $srcPresent == true ]||[ $configPresent == true ]; then
 		printf 'Warning: install files already present on system!\nIf this program has not been installed previousely, Cancel install!\n'
-		read -p "Enter proceed to install, cancel to exit, remove to uninstall: " choice
+		read -p "Enter install, cancel, or remove: " choice
 		if [ $choice == 'remove' ]; then
 			uninstall=true
 		elif [ $choice == 'cancel' ]; then
 			cancel=true
-		elif [ $choice == 'proceed' ]; then 
+		elif [ $choice == 'install' ]; then 
 			install=true
 		else
 			cancel=true
 		fi
 	else
-		read -p "Install interval with dependancies [mpg123, CMAKE, g++]? (y/N)> " choice
+		read -p "Install interval with dependancies [mpg123, CMAKE, g++, gcc]? (y/N)> " choice
 		if [ $choice == 'y' ]; then
 			install=true
 		else
@@ -137,7 +137,7 @@ if [ $(id -u) == 0 ]; then
 		if [ $release == "ID=fedora" ]; then
 			installDepDNF
 			installBin
-		elif [ $release == "ID=debian" ]; then
+		elif [ $release == "ID=debian" ]||[ $release == "ID=linuxmint" ]; then
 			installDepAPT
 			installBin
 		else
