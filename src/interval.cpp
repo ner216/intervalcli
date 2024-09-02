@@ -56,7 +56,7 @@ void interval::setClock(int h, int m, int s, char dayHalf){
 		}
 	}
 	else {
-		std::cerr << "Error [4]: Input time is invalid" << std::endl;
+		std::cerr << "Error [4]: Input time is invalid [interval::setClock]" << std::endl;
 		std::exit(4);
 	}
 }
