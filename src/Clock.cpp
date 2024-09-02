@@ -85,7 +85,7 @@ void Clock::incSec(){
 					}
 					else {
 						std::cerr << "Invalid dayHalf value [Clock::incSec]" << std::endl;
-						std::exit(5)
+						std::exit(5);
 					}
 				}
 			}
