@@ -23,7 +23,8 @@ public:
 	void runAlarm();
 	void countDown(bool h=false,bool m=false);
 	void setClock(int,int,int,char='0');
-	void syncClock(char dayHalf='0');
+	void syncClock();
 	void stopwatch(bool,bool);
 	void playAlarm() const;
+	bool getConfWorldClock() const;
 };

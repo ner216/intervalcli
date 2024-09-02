@@ -7,6 +7,13 @@ Clock::Clock(int h, int m, int s, char dayHalf){
 	this->sec = s;
 	this->dayHalf = dayHalf;
 }
+
+Clock::Clock(std::string worldClock){
+	this->hour = 0;
+	this->min = 0;
+	this->sec = 0;
+	this->worldClock = worldClock;
+}
 	
 void Clock::printTime(bool h, bool m){
 	std::cout << "Time -> ";
@@ -42,11 +49,11 @@ void Clock::printTime(bool h, bool m){
 	
 	std::cout << " ";
 	
-	if (dayHalf != '0'){
-		if (dayHalf == 'A'){
+	if (this->dayHalf != '0'){
+		if (this->dayHalf == 'A'){
 			std::cout << "AM";
 		}
-		if (dayHalf == 'P'){
+		if (this->dayHalf == 'P'){
 			std::cout << "PM";
 		}
 	}
@@ -62,6 +69,26 @@ void Clock::incSec(){
 		if (this->min > 59){
 			this->min = 0;
 			this->hour = hour + 1;
+			if (this->worldClock == "true"){
+				if (this->hour == 24){
+					this->hour = 0;
+				}
+			}
+			else {
+				if (this->hour > 12){
+					this->hour = 1;
+					if (this->dayHalf == 'A'){
+						this->dayHalf = 'P';
+					}
+					else if (this->dayHalf == 'P'){
+						this->dayHalf = 'A';
+					}
+					else {
+						std::cerr << "Invalid dayHalf value [Clock::incSec]" << std::endl;
+						std::exit(5)
+					}
+				}
+			}
 		}
 	}
 }
@@ -78,6 +105,25 @@ void Clock::decSec(){
 			if (this->hour > 0){
 				this->min = 59;
 				this->hour = this->hour - 1;
+				if (this->worldClock == "true"){
+					if (this->hour == 0){
+						this->hour = 24;
+					}
+				}
+				else {
+					if (this->hour < 1){
+						this->hour = 12;
+						if (this->dayHalf == 'A'){
+							this->dayHalf = 'P';
+						}
+						else if (this->dayHalf == 'P'){
+							this->dayHalf = 'A';
+						}
+						else {
+							std::cerr << "Invalid dayHalf value [Clock::incSec]" << std::endl;
+						}
+					}
+				}
 			}
 		}
 	}

@@ -12,7 +12,7 @@ How to Get Started:
 	Manual Install:
 		Install mpg123, CMAKE, Make, g++, and gcc with your package manager.
 	
-		create a build directory in the src directory if it is not already present.
+		create a build directory in the src directory. 
 		Move to the build directory.
 		Run command [cmake ..] to create cmake cache using the parent src directory.
 		Run command [cmake --build .] to build the program.
@@ -33,4 +33,5 @@ Intervalcli Exit Codes:
 	1: Invalid input time / input time out of range.
 	2: Unable to delete config file.
 	3: Unable to write to config file.
+	5: Clock dayHalf variable is invalid.
 	

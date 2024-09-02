@@ -108,6 +108,8 @@ int main(int argc, char *argv[]){
 	bool hourOP = false;
 	bool dispH = false;
 	bool dispM = false;
+	std::string dayHalfSTR;
+	char dayHalf;
 	int minVal = 0;
 	int secVal = 0;
 	int hourVal = 0;
@@ -203,18 +205,45 @@ int main(int argc, char *argv[]){
 			std::cout << "Enter alarm time(hr min) >";
 			std::cin >> hourVal;
 			std::cin >> minVal;
+			if (clock.getConfWorldClock() == false){
+				std::cout << "AM or PM: ";
+				std::cin >> dayHalfSTR;
+				if (dayHalfSTR == "AM" || dayHalfSTR == "am" || dayHalfSTR == "a" || dayHalfSTR == "A"){
+					dayHalf = 'A';
+				}
+				else if (dayHalfSTR == "PM" || dayHalfSTR == "pm" || dayHalfSTR == "p" || dayHalfSTR == "P"){
+					dayHalf = 'P';
+				}
+				else {
+					std::cerr << "Error: invalid input for dayHalf [main]" << std::endl;
+					return 1;
+				}
+			}
 			if (verbose){
 				std::cout << "[v] -> HOURVAL: " << hourVal  << " [main]" << std::endl;
 				std::cout << "[v] -> MINVAL: " << minVal  << " [main] " << std::endl;
 			}
-			if (hourVal >= 0 && hourVal < 24 && minVal >= 0 && minVal < 60){
-				clock.setAlarm(hourVal,minVal,0);
-				clock.runAlarm();
+			if (clock.getConfWorldClock() == true){
+				if (hourVal >= 0 && hourVal < 24 && minVal >= 0 && minVal < 60){
+					clock.setAlarm(hourVal,minVal,secVal,0);
+					clock.runAlarm();
+				}
+				else {
+					std::cerr << "Error: invalid input time [main]" << std::endl;
+					return 1;
+				}
 			}
-			else {
-				std::cerr << "Error: invalid input time [main]" << std::endl;
-				return 1;
+			else if (clock.getConfWorldClock() == false){
+				if (hourVal > 0 && hourVal <= 12 && minVal >= 0 && minVal < 60){
+					clock.setAlarm(hourVal,minVal,secVal,dayHalf);
+					clock.runAlarm();
+				}
+				else {
+					std::cerr << "Error: invalid input time [main]" << std::endl;
+					return 1;
+				}
 			}
+			
 		}
 	
 	} //closing bracket for parent if statement

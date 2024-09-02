@@ -4,9 +4,9 @@
 
 interval::interval(int h, int m, int s, bool editConfig, bool verbose){
 	//initialize pointer members for composition of structs
-	this->currClock = new Clock();
-	this->alarmClock = new Clock();
 	this->config = new Config();
+	this->currClock = new Clock(this->config->worldClock);
+	this->alarmClock = new Clock(this->config->worldClock);
 	this->verbose = verbose;
 	
 	if (editConfig == true){
@@ -34,13 +34,13 @@ interval::~interval(){
 void interval::setClock(int h, int m, int s, char dayHalf){
 	bool validInput = false;	//flag is switched when input is varified
 
-	if (dayHalf != '0'){
-		if (h < 13 && h > 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
+	if (this->config->worldClock == "false"){
+		if (h <= 12 && h >= 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
 			validInput = true;
 		}
 	}
 	else {
-		if (h < 24 && m < 60 && s < 60){
+		if (h < 24 && h >= 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
 			validInput = true;
 		}
 	}
@@ -61,7 +61,7 @@ void interval::setClock(int h, int m, int s, char dayHalf){
 	}
 }
 
-void interval::syncClock(char dayHalf){	//make adjustments later for time zone
+void interval::syncClock(){	//make adjustments later for time zone
 	//used by time library to return a time struct:
 	struct tm * ptm;
 	time_t curTime;
@@ -70,14 +70,26 @@ void interval::syncClock(char dayHalf){	//make adjustments later for time zone
 	time(&rawTime);
 	ptm = gmtime(&rawTime);
 	
-	if (dayHalf == '0'){
-		this->currClock->hour = (ptm->tm_hour + ConvertLib::timeMod(config->timeZone)); //uses function from convert library - returns time zone modifier
-		if (this->currClock->hour < 0){
-			this->currClock->hour = this->currClock->hour + 24;
-		}
-		this->currClock->min = ptm->tm_min;
-		this->currClock->sec = ptm->tm_sec;
+	
+	this->currClock->hour = (ptm->tm_hour + ConvertLib::timeMod(config->timeZone)); //uses function from convert library - returns time zone modifier
+	if (this->currClock->hour < 0){
+		this->currClock->hour = this->currClock->hour + 24;
 	}
+	if (this->config->worldClock == "false"){
+		if (this->currClock->hour == 12){
+			this->currClock->dayHalf = 'P';
+		}
+		else if (this->currClock->hour < 12){
+			this->currClock->dayHalf = 'A';
+		}
+		else {
+			this->currClock->dayHalf = 'P';
+			this->currClock->hour = this->currClock->hour - 12;
+		}
+	}
+	this->currClock->min = ptm->tm_min;
+	this->currClock->sec = ptm->tm_sec;
+
 	
 	if (this->verbose){
 		std::cout << "[v] -> Set current clock time [interval::syncClock] ";
@@ -89,12 +101,12 @@ void interval::setAlarm(int h, int m, int s, char dayHalf){		//dayHalf can be 'A
 	bool validInput = false;	//flag switched when input is validated.
 	
 	if (this->config->worldClock == "true"){
-		if (h < 24 && m < 60 && s < 60){
+		if (h < 24 && h >= 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
 			validInput = true;
 		}
 	}
 	else {
-		if (h < 13 && h > 0 && m < 60 && s < 60){
+		if (h <= 12 && h >= 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
 			validInput = true;
 		}
 	}
@@ -110,7 +122,7 @@ void interval::setAlarm(int h, int m, int s, char dayHalf){		//dayHalf can be 'A
 		}
 	}
 	else {
-		std::cerr << "Error [4]: Input time is invalid" << std::endl;
+		std::cerr << "Error [4]: Input time is invalid [interval::setAlarm]" << std::endl;
 		std::exit(4);
 	}	
 }
@@ -183,7 +195,14 @@ void interval::stopwatch(bool Hour, bool Min){
 	}
 }
 
-
+bool interval::getConfWorldClock() const {
+	if (this->config->worldClock == "true"){
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
 void interval::playAlarm() const{
 	std::system(config->soundDir.c_str());
