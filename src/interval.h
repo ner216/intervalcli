@@ -7,24 +7,27 @@
 #include "Config.h"
 
 class interval {
+//private members:
 private:
 	bool verbose;
 	Clock* currClock;	
 	Clock* alarmClock;
 	Config* config;		//struct that interprets config file.
+//private methods:
 	
+//public methods:
 public:
 	//clock refers to running clock displayed; alarm refers to end point for clock.
 	interval(int h=0,int m=0,int s=0,bool editConfig=false,bool verbose=false);
 	~interval();
+	void print(char clock, bool dispH=true, bool dispM=true, bool Label=true);
 	std::string getOptionStr(std::string);
-	void print(bool=false, bool=false);
 	void setAlarm(int,int,int,char='0');
-	void runAlarm();
-	void countDown(bool h=false,bool m=false);
+	void runAlarm(bool quiet, bool Hour, bool Min, bool Label=true);
+	void countDown(bool quiet, bool Hour,bool Min,bool Label=true);
 	void setClock(int,int,int,char='0');
 	void syncClock();
-	void stopwatch(bool,bool);
+	void stopwatch(bool quiet, bool Hour,bool Min,bool Label=true);
 	void playAlarm() const;
 	bool getConfWorldClock() const;
 };

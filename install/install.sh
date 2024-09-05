@@ -23,6 +23,11 @@ installBin(){
 	printf 'Copying files...\n'
 	cd ..
 	cd src/
+	if [ -d build ]; then
+		echo "Removing build directory..."
+		rm -r build
+	fi
+	echo "Creating build directory..."
 	mkdir build
 	cd build/
 	#rebuild the project for the system:

@@ -15,9 +15,11 @@ Clock::Clock(std::string worldClock){
 	this->worldClock = worldClock;
 }
 	
-void Clock::printTime(bool h, bool m){
-	std::cout << "Time -> ";
-
+void Clock::printTime(bool h, bool m, bool l){
+	if (l == true){
+		std::cout << "Time -> ";
+	}
+	
 	if (hour < 10){
 		std::cout << "0" << hour;
 	}
@@ -25,7 +27,7 @@ void Clock::printTime(bool h, bool m){
 		std::cout << hour;
 	}
 	
-	if (h == false){
+	if (h == true){
 		std::cout << ":";
 		
 		if (min < 10){
@@ -36,7 +38,7 @@ void Clock::printTime(bool h, bool m){
 		}
 	}
 	
-	if (m == false){
+	if (m == true){
 		std::cout << ":";
 		
 		if (sec < 10){
@@ -133,30 +135,4 @@ void Clock::decSec(){
 bool Clock::operator==(Clock const& other){
 	return (this->hour == other.hour && this->min == other.min && this->sec == other.sec && this->dayHalf == other.dayHalf);
 }
-	
-void Clock::operator=(Clock &other){
-	other.hour = this->hour;
-	other.min = this->min;
-	other.sec = this->sec;
-	other.dayHalf = this->dayHalf;
-}
-
-double Clock::operator-(Clock const& other){	//needs update for 12 hour clock
-	int result;
-	int dhour;
-	int dmin;
-	int dsec;
-	
-	//abs is absolute value function
-	dhour = abs(this->hour - other.hour);	//abs() is from ConvertLib namespace
-	dmin = abs(this->min - other.min);
-	dsec = abs(this->sec - other.sec);
-	
-	result = dhour - (dmin / 60) - (dsec / 3600);
-	
-	//std::cout << "OP -: " << "HOUR: " << dhour << " MIN: " << dmin << " SEC: " << dsec << " RESULT: " << result << std::endl;
-	return result;
-}
-
-
 

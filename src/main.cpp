@@ -12,7 +12,8 @@ void help(){
 	<< " [COMMAND] help : basic commands and usage" << std::endl
 	<< " [COMMAND] config: edit config file" << std::endl
 	<< " [COMMAND] repair: regenerate config file" << std::endl
-	<< " [COMMAND] codes: list program error codes" << std::endl;
+	<< " [COMMAND] codes: list program error codes" << std::endl
+	<< " [COMMAND] print: print the current system time" << std::endl;
 	
 	std::cout << "PolyArgument Commands: " << std::endl;
 	std::cout << "Modes: " << std::endl;
@@ -25,7 +26,9 @@ void help(){
 	<< " -s : seconds" << std::endl
 	<< " -h : hours" << std::endl
 	<< " -DM : display values [hours][minutes]" << std::endl
-	<< " -DH : display values [hours]" << std::endl;
+	<< " -DH : display values [hours]" << std::endl
+	<< " -q : only display label [Timer running...] " << std::endl
+	<< " -FQ : show no output to console" << std::endl;
 	
 	
 	std::cout << "Misc Options: " << std::endl
@@ -86,10 +89,10 @@ void errorCodes(){
 }
 
 void version(){
-	std::cout << "VERSION 1.5.1" << std::endl
+	std::cout << "VERSION 1.7.0" << std::endl
 	<< "Date Originally Published: 8-17-24" << std::endl
-	<< "Date of most recent update: 9-1-24" << std::endl
-	<< "Publisher: Nolan Pro" << std::endl;
+	<< "Date of most recent update: 9-5-24" << std::endl
+	<< "Publisher: Nolan Provencher" << std::endl;
 }
 
 
@@ -98,6 +101,9 @@ void version(){
 //boolean switches are used to store the state of arguments.
 int main(int argc, char *argv[]){
 	//initialize switch variables
+	bool quiet = false;
+	bool fullQuiet = false;
+	bool printTime = false;
 	bool editConfig = false;
 	bool verbose = false;
 	bool timer = false;
@@ -106,8 +112,8 @@ int main(int argc, char *argv[]){
 	bool minOP = false;
 	bool secOP = false;
 	bool hourOP = false;
-	bool dispH = false;
-	bool dispM = false;
+	bool dispH = true;
+	bool dispM = true;
 	std::string dayHalfSTR;
 	char dayHalf;
 	int minVal = 0;
@@ -138,6 +144,16 @@ int main(int argc, char *argv[]){
 					editConfig = true;
 					break;
 				}
+				if (argv[i][x] == 'p' && argv[i][x+1] == 'r' && argv[i][x+2] == 'i'){
+					printTime = true;
+				}
+				if (argv[i][x] == 'F' && argv[i][x+1] == 'Q'){
+					fullQuiet = true;
+				}
+				if (argv[i][x] == 'q'){
+					fullQuiet = true;
+					quiet = true;
+				}
 				if (argv[i][x] == 'v'){
 					verbose = true;
 				}
@@ -160,10 +176,10 @@ int main(int argc, char *argv[]){
 					hourOP = true;
 				}
 				if (argv[i][x] == 'D' && argv[i][x+1] == 'M'){
-					dispM = true;
+					dispM = false;
 				}
 				if (argv[i][x] == 'D' && argv[i][x+1] == 'H'){
-					dispH = true;
+					dispH = false;
 				}
 				if (ConvertLib::isDigit(argv[i][x]) && secVal == 0 && minVal == 0 && hourVal == 0){
 					if (secOP == true){
@@ -190,15 +206,26 @@ int main(int argc, char *argv[]){
 
 		
 		//check if mode arguments exist.
+		if (printTime == true){
+			clock.syncClock();
+			clock.print('c', true, true, false);	//set hour and min to true, and label to false
+			return 0;
+		}
 		
 		if (timer == true){
 			clock.setClock(hourVal, minVal, secVal);
 			clock.setAlarm(0,0,0);
-			clock.countDown(dispH, dispM);
+			if (quiet == true){
+				std::cout << "Timer running..." << std::endl;
+			}
+			clock.countDown(fullQuiet, dispH, dispM);
 		}
 		else if (stopwatch == true){
 			clock.setClock(hourVal, minVal, secVal);
-			clock.stopwatch(dispH, dispM);
+			if (quiet == true){
+				std::cout << "Timer running..." << std::endl;
+			}
+			clock.stopwatch(fullQuiet, dispH, dispM);
 		}
 		else if (alarm == true){
 			clock.syncClock();
@@ -226,7 +253,10 @@ int main(int argc, char *argv[]){
 			if (clock.getConfWorldClock() == true){
 				if (hourVal >= 0 && hourVal < 24 && minVal >= 0 && minVal < 60){
 					clock.setAlarm(hourVal,minVal,secVal,0);
-					clock.runAlarm();
+					if (quiet == true){
+						std::cout << "Timer running..." << std::endl;
+					}
+					clock.runAlarm(fullQuiet, dispH, dispM);
 				}
 				else {
 					std::cerr << "Error: invalid input time [main]" << std::endl;
@@ -236,7 +266,10 @@ int main(int argc, char *argv[]){
 			else if (clock.getConfWorldClock() == false){
 				if (hourVal > 0 && hourVal <= 12 && minVal >= 0 && minVal < 60){
 					clock.setAlarm(hourVal,minVal,secVal,dayHalf);
-					clock.runAlarm();
+					if (quiet == true){
+						std::cout << "Timer running..." << std::endl;
+					}
+					clock.runAlarm(fullQuiet, dispH, dispM);
 				}
 				else {
 					std::cerr << "Error: invalid input time [main]" << std::endl;

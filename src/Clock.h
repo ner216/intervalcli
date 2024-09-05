@@ -10,10 +10,8 @@ struct Clock {
 	
 	Clock(int h, int m, int s, char dayHalf='0');
 	Clock(std::string worldClock);
-	void printTime(bool h=false, bool m=false);
+	void printTime(bool h=false, bool m=false, bool l=true);
 	void incSec();
 	void decSec();
 	bool operator==(Clock const& other);
-	void operator=(Clock &other);
-	double operator-(Clock const& other);
 };

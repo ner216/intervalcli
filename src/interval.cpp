@@ -31,6 +31,19 @@ interval::~interval(){
 	}
 }
 
+void interval::print(char clock, bool dispH, bool dispM, bool Label){
+	if (clock == 'c'){
+		this->currClock->printTime(dispH, dispM, Label);
+	}
+	else if (clock == 'a'){
+		this->alarmClock->printTime(dispH, dispM, Label);
+	}
+	else {
+		std::cerr << "Error: Invalid values [interval::print]" << std::endl;
+		std::exit(1);
+	}
+}
+
 void interval::setClock(int h, int m, int s, char dayHalf){
 	bool validInput = false;	//flag is switched when input is varified
 
@@ -127,17 +140,19 @@ void interval::setAlarm(int h, int m, int s, char dayHalf){		//dayHalf can be 'A
 	}	
 }
 
-void interval::runAlarm(){
+void interval::runAlarm(bool quiet, bool dispH, bool dispM, bool Label){
 	int diffH, diffM, diffS;
 
-	while (true){	
-		if (this->verbose == false){
+	while (true){
+		if (quiet == false){
+			if (this->verbose == false){
 			system("clear");
-		}
-		std::cout << "Current ";
-		currClock->printTime();
-		std::cout << "Alarm ";
-		alarmClock->printTime();
+			}
+			std::cout << "Current ";
+			interval::print('c', dispH, dispM, Label);
+			std::cout << "Alarm ";
+			interval::print('a', dispH, dispM, Label);
+		}	
 		
 		//get difference values by subtracting struct members
 		diffH = currClock->hour - alarmClock->hour;
@@ -147,9 +162,11 @@ void interval::runAlarm(){
 		if (diffH == 0){
 			if (diffM == 0){
 				if (diffS == 0 || diffS == 1){
-					std::cout << "Alarm time reached" << std::endl;
-					playAlarm();
-					break;
+					if (this->currClock->dayHalf == this->alarmClock->dayHalf){
+						std::cout << "Alarm time reached" << std::endl;
+						playAlarm();
+						break;
+					}
 				}
 			}
 		}
@@ -159,9 +176,11 @@ void interval::runAlarm(){
 }
 
 
-void interval::countDown(bool Hour, bool Min){
-	if (this->verbose){
+void interval::countDown(bool quiet, bool Hour, bool Min, bool Label){
+	if (quiet == false){
+		if (this->verbose){
 		sleep(3);
+	}
 	}
 	bool alarm = false;
 
@@ -176,22 +195,27 @@ void interval::countDown(bool Hour, bool Min){
 			interval::playAlarm();
 			break;
 		}
-		if (this->verbose == false){
-			std::system("clear");
+
+		if (quiet == false){
+			if (this->verbose == false){
+				std::system("clear");
+			}
+			interval::print('c', Hour, Min, Label);
 		}
-		this->currClock->printTime(Hour, Min);
 		sleep(1.1);
 	}
 }
 
-void interval::stopwatch(bool Hour, bool Min){
+void interval::stopwatch(bool quiet, bool Hour, bool Min, bool Label){
 	while (true){
 		this->currClock->incSec();
-		this->currClock->printTime(Hour, Min);
-		sleep(1.1);
+		if (quiet == false){
 		if (this->verbose == false){
 			std::system("clear");
 		}
+		interval::print('c', Hour, Min, Label);
+		}
+		sleep(1.1);
 	}
 }
 
