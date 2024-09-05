@@ -1,1 +1,0 @@
-/usr/bin/c++ CMakeFiles/intervalcli.dir/Config.cpp.o CMakeFiles/intervalcli.dir/Clock.cpp.o CMakeFiles/intervalcli.dir/interval.cpp.o CMakeFiles/intervalcli.dir/main.cpp.o -o intervalcli  Libraries/libConvertLib.a 

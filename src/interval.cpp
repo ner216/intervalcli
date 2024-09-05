@@ -67,7 +67,7 @@ void interval::setClock(int h, int m, int s, char dayHalf){
 	
 }
 
-void interval::syncClock(int wc, std::string zone){	//make adjustments later for time zone
+void interval::syncClock(bool wc, std::string zone){	//make adjustments later for time zone
 	//used by time library to return a time struct:
 	struct tm * ptm;
 	time_t curTime;
@@ -86,7 +86,7 @@ void interval::syncClock(int wc, std::string zone){	//make adjustments later for
 	if (this->currClock->hour < 0){
 		this->currClock->hour = this->currClock->hour + 24;
 	}
-	if (this->config->worldClock == "false" || wc == 12){
+	if (this->config->worldClock == "false" || wc == false){
 		if (this->currClock->hour == 12){
 			this->currClock->dayHalf = 'P';
 		}

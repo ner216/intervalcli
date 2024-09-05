@@ -3,17 +3,19 @@
 #include "interval.h"
 
 void help(){
-	std::cout << "Order of options is not mandatory and not all option fields are required." << std::endl
-	<< "For example; a misc option is not required for usage." << std::endl
-	<< "IMPORTANT: Only one time option can be used at a time." << std::endl;	
+	std::cout << "Order of options is not enforced and option fields are not all required." << std::endl
+	<< "For example; a misc option is not required for usage." << std::endl << std::endl
+	<< "IMPORTANT: Only one time option can be used at a time." << std::endl << std::endl;	
 	
 	std::cout << "MonoArgument Commands: " << std::endl
-	<< " [COMMAND] version : version and publish information" << std::endl
-	<< " [COMMAND] help : basic commands and usage" << std::endl
-	<< " [COMMAND] config: edit config file" << std::endl
-	<< " [COMMAND] repair: regenerate config file" << std::endl
-	<< " [COMMAND] codes: list program error codes" << std::endl
-	<< " [COMMAND] print: print the current system time" << std::endl;
+	<< " version : version and publish information" << std::endl
+	<< " help : basic commands and usage" << std::endl
+	<< " config: edit config file" << std::endl
+	<< " repair: regenerate config file" << std::endl
+	<< " codes: list program error codes" << std::endl
+	<< " print [timezone] [12]: returns the current system time." << std::endl
+	<< "	Timezone field will convert the time to a given timezone. " << std::endl
+	<< "	'12' feild will convert 24h time to 12h." << std::endl << std::endl;
 	
 	std::cout << "PolyArgument Commands: " << std::endl;
 	std::cout << "Modes: " << std::endl;
@@ -36,7 +38,11 @@ void help(){
 	
 	std::cout << "Usage Examples: " << std::endl;
 	std::cout << " [COMMAND] -[MODE] -[TIME_OPTION] -[MISC_OPTION] [TIMEVALUE]" << std::endl
-	<< " EX: [COMMAND] -t -m 40" << std::endl;
+	<< " EX: [COMMAND] -t -m 40" << std::endl
+	<< " EX: [COMMAND] tm 40" << std::endl
+	<< "	sets a timer for 40 minutes" << std::endl
+	<< " EX: [COMMAND] print PDT 12" << std::endl
+	<< "	returns the time converted to 12h format in the PDT timezone" << std::endl;
 }
 
 void repair(){
@@ -89,7 +95,7 @@ void errorCodes(){
 }
 
 void version(){
-	std::cout << "VERSION 1.7.0" << std::endl
+	std::cout << "VERSION 1.8.0" << std::endl
 	<< "Date Originally Published: 8-17-24" << std::endl
 	<< "Date of most recent update: 9-5-24" << std::endl
 	<< "Publisher: Nolan Provencher" << std::endl;
@@ -186,8 +192,7 @@ int main(int argc, char *argv[]){
 				if (argv[i][x] == 'D' && argv[i][x+1] == 'H'){
 					dispH = true;
 				}
-				
-				if (ConvertLib::isDigit(argv[i][x]) && secVal == 0 && minVal == 0 && hourVal == 0){
+				if (printTime == false && ConvertLib::isDigit(argv[i][x]) && secVal == 0 && minVal == 0 && hourVal == 0){
 					if (secOP == true){
 						secVal = ConvertLib::charToInt(argv[i]);
 					}
@@ -198,7 +203,7 @@ int main(int argc, char *argv[]){
 						hourVal = ConvertLib::charToInt(argv[i]);
 					}
 					else {
-						std::cerr << "Error: Invalid arguments or argument order" << std::endl;
+						std::cerr << "Error: Too many arguments or argument order [main]" << std::endl;
 						return 1;
 					}
 				}
@@ -216,7 +221,7 @@ int main(int argc, char *argv[]){
 		if (printTime == true){
 			if (argc > 2){
 				for (int i = 0; i < 3; i++){
-					tempZone = tempZone + argv[2][i];
+					tempZone = tempZone + ConvertLib::upper(argv[2][i]);
 				}
 				if (argc > 3){
 					if (argv[3][0] == '1' && argv[3][1] == '2'){
@@ -228,7 +233,7 @@ int main(int argc, char *argv[]){
 				}
 			}
 			clock.syncClock(worldClock, tempZone);
-			clock.print('c', false, false, false);	//set hour and min to true, and label to false
+			clock.print('c', false, false, false);	//set disphour and dispmin to false, and label to false
 			return 0;
 		}
 		
@@ -272,7 +277,7 @@ int main(int argc, char *argv[]){
 			}
 			if (clock.getConfWorldClock() == true){
 				if (hourVal >= 0 && hourVal < 24 && minVal >= 0 && minVal < 60){
-					clock.setAlarm(hourVal,minVal,secVal,0);
+					clock.setAlarm(hourVal,minVal,secVal,'0');
 					if (quiet == true){
 						std::cout << "Timer running..." << std::endl;
 					}

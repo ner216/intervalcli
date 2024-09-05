@@ -26,7 +26,7 @@ public:
 	void runAlarm(bool quiet, bool Hour, bool Min, bool Label=true);
 	void countDown(bool quiet, bool Hour,bool Min,bool Label=true);
 	void setClock(int h,int m,int s,char dayHalf='0');
-	void syncClock(int wc=0, std::string zone="none");
+	void syncClock(bool wc=0, std::string zone="none");
 	void stopwatch(bool quiet, bool Hour,bool Min,bool Label=true);
 	void playAlarm() const;
 	bool getConfWorldClock() const;

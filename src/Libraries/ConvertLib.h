@@ -5,6 +5,7 @@
 
 namespace ConvertLib {
 
+	char upper(char i);
 	bool isDigit(char val);
 	int powTen(int n);
 	int charToInt(char val[]);

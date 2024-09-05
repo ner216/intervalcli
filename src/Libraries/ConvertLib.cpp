@@ -45,6 +45,15 @@ namespace ConvertLib {
 		char digits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 		return digits[num];
 	}
+	
+	char upper(char i){
+		if (i >= 97 && i <= 122){
+			return i - 32;
+		}
+		else {
+			return i;
+		}
+	}
 
 	//absolute value function for int
 	int abs(int num){
