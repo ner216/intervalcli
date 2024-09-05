@@ -1,8 +1,13 @@
+WARNING: THE INSTALLER HAS NOT BEEN FULLY TESTED AND MAY HAVE UNEXPECTED BEHAVIORS! Use at your own risk! The manual install is the safest install method.
+
 Summary:
-	Intervalcli is an intuitive alarm, timer, clock, and stopwatch application. Created by Nolan Provencher.
+	Intervalcli is an intuitive alarm, timer, clock, and stopwatch command line application. Created by Nolan Provencher.
 	This program comes with no warrenty. Program uses CMAKE, Make, and mpg123. mpg123 is used to create the alarm sound.
 
 How to Get Started:
+	
+	It is recommended to follow manual install for safety. Bash installer is experimental.
+	Installer will install on Debian, Ubuntu, Linux Mint, and Fedora.
 
 	Install with installer script:
 		This program includes an install bash script in the 'install' directory. Use this script at your own risk! Installer

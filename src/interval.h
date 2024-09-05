@@ -22,10 +22,10 @@ public:
 	~interval();
 	void print(char clock, bool dispH=true, bool dispM=true, bool Label=true);
 	std::string getOptionStr(std::string);
-	void setAlarm(int,int,int,char='0');
+	void setAlarm(int h,int m,int s,char dayHalf='0');
 	void runAlarm(bool quiet, bool Hour, bool Min, bool Label=true);
 	void countDown(bool quiet, bool Hour,bool Min,bool Label=true);
-	void setClock(int,int,int,char='0');
+	void setClock(int h,int m,int s,char dayHalf='0');
 	void syncClock();
 	void stopwatch(bool quiet, bool Hour,bool Min,bool Label=true);
 	void playAlarm() const;
