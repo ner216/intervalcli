@@ -19,35 +19,35 @@ void Clock::printTime(bool h, bool m, bool l){
 	if (l == true){
 		std::cout << "Time -> ";
 	}
-	
 	if (hour < 10){
 		std::cout << "0" << hour;
 	}
 	else{
 		std::cout << hour;
 	}
-	
-	if (h == true){
+	if (h == false){
 		std::cout << ":";
-		
+	
 		if (min < 10){
 			std::cout << "0" << min;
 		}
 		else{
 			std::cout << min;
 		}
+		
+
+		if (m == false){
+			std::cout << ":";
+			
+			if (sec < 10){
+				std::cout << "0" << sec;
+			}
+			else{
+				std::cout << sec;
+			}
+		}
 	}
 	
-	if (m == true){
-		std::cout << ":";
-		
-		if (sec < 10){
-			std::cout << "0" << sec;
-		}
-		else{
-			std::cout << sec;
-		}
-	}
 	
 	std::cout << " ";
 	

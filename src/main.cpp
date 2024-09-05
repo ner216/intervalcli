@@ -112,8 +112,8 @@ int main(int argc, char *argv[]){
 	bool minOP = false;
 	bool secOP = false;
 	bool hourOP = false;
-	bool dispH = true;
-	bool dispM = true;
+	bool dispH = false;
+	bool dispM = false;
 	std::string dayHalfSTR;
 	char dayHalf;
 	int minVal = 0;
@@ -176,10 +176,10 @@ int main(int argc, char *argv[]){
 					hourOP = true;
 				}
 				if (argv[i][x] == 'D' && argv[i][x+1] == 'M'){
-					dispM = false;
+					dispM = true;
 				}
 				if (argv[i][x] == 'D' && argv[i][x+1] == 'H'){
-					dispH = false;
+					dispH = true;
 				}
 				if (ConvertLib::isDigit(argv[i][x]) && secVal == 0 && minVal == 0 && hourVal == 0){
 					if (secOP == true){
@@ -208,7 +208,7 @@ int main(int argc, char *argv[]){
 		//check if mode arguments exist.
 		if (printTime == true){
 			clock.syncClock();
-			clock.print('c', true, true, false);	//set hour and min to true, and label to false
+			clock.print('c', false, false, false);	//set hour and min to true, and label to false
 			return 0;
 		}
 		

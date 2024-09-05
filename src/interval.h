@@ -20,7 +20,7 @@ public:
 	//clock refers to running clock displayed; alarm refers to end point for clock.
 	interval(int h=0,int m=0,int s=0,bool editConfig=false,bool verbose=false);
 	~interval();
-	void print(char clock, bool dispH=true, bool dispM=true, bool Label=true);
+	void print(char clock, bool dispH=false, bool dispM=false, bool Label=true);	//if dispH or dispM is true, following output will be trunkated
 	std::string getOptionStr(std::string);
 	void setAlarm(int h,int m,int s,char dayHalf='0');
 	void runAlarm(bool quiet, bool Hour, bool Min, bool Label=true);

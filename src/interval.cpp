@@ -45,33 +45,26 @@ void interval::print(char clock, bool dispH, bool dispM, bool Label){
 }
 
 void interval::setClock(int h, int m, int s, char dayHalf){
-	bool validInput = false;	//flag is switched when input is varified
 
-	if (this->config->worldClock == "false"){
-		if (h <= 12 && h >= 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
-			validInput = true;
-		}
+	if (s > 59){
+		m = m + (s / 60);
+		s = s % 60;
 	}
-	else {
-		if (h < 24 && h >= 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
-			validInput = true;
-		}
+	if (m > 59){
+		h = h + (m / 60);
+		m = m % 60;
 	}
 	
-	if (validInput == true){
-		this->currClock->hour = h;
-		this->currClock->min = m;
-		this->currClock->sec = s;
-		this->currClock->dayHalf = dayHalf;
-		if (this->verbose){
-			std::cout << "[v] -> Clock time set successfully [interval::interval]" << std::endl;
-			std::cout << "[v] -> Hour: " << h << " Min: " << m << " Sec: " << s << " DayHalf: " << dayHalf << " [interval::setClock]" << std::endl;
-		}
+	
+	this->currClock->hour = h;
+	this->currClock->min = m;
+	this->currClock->sec = s;
+	this->currClock->dayHalf = dayHalf;
+	if (this->verbose){
+		std::cout << "[v] -> Clock time set successfully [interval::interval]" << std::endl;
+		std::cout << "[v] -> Hour: " << h << " Min: " << m << " Sec: " << s << " DayHalf: " << dayHalf << " [interval::setClock]" << std::endl;
 	}
-	else {
-		std::cerr << "Error [4]: Input time is invalid [interval::setClock]" << std::endl;
-		std::exit(4);
-	}
+	
 }
 
 void interval::syncClock(){	//make adjustments later for time zone
