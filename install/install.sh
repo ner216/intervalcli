@@ -70,7 +70,7 @@ installBin(){
 installDepDNF(){
 	#install dependancies
 	printf 'Updating repos...\n'
-	dnf update
+	dnf upgrade --refresh
 	printf 'Installing [mpg123,CMAKE,g++,gcc]...\n'
 	dnf install mpg123 cmake g++ gcc
 
@@ -79,7 +79,6 @@ installDepDNF(){
 installDepAPT(){
 	printf 'Updating repos...\n'
 	apt update
-	apt upgrade
 	printf 'Installing [mpg123,CMAKE,g++,gcc]...\n'
 	apt install mpg123 cmake g++ gcc
 
