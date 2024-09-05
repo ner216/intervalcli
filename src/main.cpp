@@ -114,11 +114,16 @@ int main(int argc, char *argv[]){
 	bool hourOP = false;
 	bool dispH = false;
 	bool dispM = false;
-	std::string dayHalfSTR;
+	
 	char dayHalf;
 	int minVal = 0;
 	int secVal = 0;
 	int hourVal = 0;
+	
+	std::string dayHalfSTR;
+	//Used to modify timezone for main print option.
+	std::string tempZone = "";		
+	int worldClock = true;
 	
 
 	if (argc > 0){
@@ -181,6 +186,7 @@ int main(int argc, char *argv[]){
 				if (argv[i][x] == 'D' && argv[i][x+1] == 'H'){
 					dispH = true;
 				}
+				
 				if (ConvertLib::isDigit(argv[i][x]) && secVal == 0 && minVal == 0 && hourVal == 0){
 					if (secOP == true){
 						secVal = ConvertLib::charToInt(argv[i]);
@@ -196,6 +202,7 @@ int main(int argc, char *argv[]){
 						return 1;
 					}
 				}
+				
 			}
 		//bracket to close for loop
 		}
@@ -207,7 +214,20 @@ int main(int argc, char *argv[]){
 		
 		//check if mode arguments exist.
 		if (printTime == true){
-			clock.syncClock();
+			if (argc > 2){
+				for (int i = 0; i < 3; i++){
+					tempZone = tempZone + argv[2][i];
+				}
+				if (argc > 3){
+					if (argv[3][0] == '1' && argv[3][1] == '2'){
+						worldClock = false;
+					}
+					else {
+						worldClock = true;
+					}
+				}
+			}
+			clock.syncClock(worldClock, tempZone);
 			clock.print('c', false, false, false);	//set hour and min to true, and label to false
 			return 0;
 		}

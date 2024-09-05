@@ -67,7 +67,7 @@ void interval::setClock(int h, int m, int s, char dayHalf){
 	
 }
 
-void interval::syncClock(){	//make adjustments later for time zone
+void interval::syncClock(int wc, std::string zone){	//make adjustments later for time zone
 	//used by time library to return a time struct:
 	struct tm * ptm;
 	time_t curTime;
@@ -76,12 +76,17 @@ void interval::syncClock(){	//make adjustments later for time zone
 	time(&rawTime);
 	ptm = gmtime(&rawTime);
 	
+	if (zone == "none"){
+		this->currClock->hour = (ptm->tm_hour + ConvertLib::timeMod(config->timeZone)); //uses function from convert library - returns time zone modifier
+	}
+	else {
+		this->currClock->hour = (ptm->tm_hour + ConvertLib::timeMod(zone)); 
+	}
 	
-	this->currClock->hour = (ptm->tm_hour + ConvertLib::timeMod(config->timeZone)); //uses function from convert library - returns time zone modifier
 	if (this->currClock->hour < 0){
 		this->currClock->hour = this->currClock->hour + 24;
 	}
-	if (this->config->worldClock == "false"){
+	if (this->config->worldClock == "false" || wc == 12){
 		if (this->currClock->hour == 12){
 			this->currClock->dayHalf = 'P';
 		}
