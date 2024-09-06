@@ -4,7 +4,8 @@
 #include <fstream>
 
 namespace ConvertLib {
-
+	
+	bool isLetter(char i);
 	char upper(char i);
 	bool isDigit(char val);
 	int powTen(int n);

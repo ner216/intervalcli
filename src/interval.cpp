@@ -44,8 +44,85 @@ void interval::print(char clock, bool dispH, bool dispM, bool Label){
 	}
 }
 
-void interval::setClock(int h, int m, int s, char dayHalf){
+void interval::printField(char clock, char field){
+	if (clock == 'c'){
+		switch (field){
+			case 'h':
+				std::cout << this->currClock->hour << std::endl;
+				break;
+			case 'm':
+				std::cout << this->currClock->min << std::endl;
+				break;
+			case 's':
+				std::cout << this->currClock->sec << std::endl;
+				break;
+			default:
+				std::cerr << "Error: Invalid field [interval::printField]" << std::endl;
+		}
+	}
+	else if (clock == 'a'){
+		switch (field){
+			case 'h':
+				std::cout << this->alarmClock->hour << std::endl;
+				break;
+			case 'm':
+				std::cout << this->alarmClock->min << std::endl;
+				break;
+			case 's':
+				std::cout << this->alarmClock->sec << std::endl;
+				break;
+			default:
+				std::cerr << "Error: Invalid field [interval::printField]" << std::endl;
+		}
+	}
+	else {
+		std::cerr << "Error: Invalid clock [interval::printField]" << std::endl;
+		exit(1);
+	}
+}
 
+void interval::printTime(char* argv[], int argc, char field, int clockMode){
+	const int ZONELENGTH = 3;
+	std::string readZone = "";	
+	int timeFormat;
+	
+	for (int Array = 2; Array < argc; Array++){
+		for (int Char = 0; Char < sizeof(argv[Array])/sizeof(char); Char++){
+			if (argv[Array][Char] == '-' && argv[Array][Char+1] == '-'){
+				if (ConvertLib::isLetter(argv[Array][Char + 2]) == true && Char + 4 < sizeof(argv[Array])/sizeof(char)){
+					readZone = readZone + ConvertLib::upper(argv[Array][Char + 2]) + 
+						ConvertLib::upper(argv[Array][Char + 3]) + ConvertLib::upper(argv[Array][Char + 4]);
+					if (ConvertLib::timeMod(readZone) != 0){
+						this->config->timeZone = readZone;
+					}
+				}
+			}
+			
+		}//closing child for loop
+	}//closing parent for loop
+	
+	if (clockMode == 12){
+		this->config->worldClock = "false";
+	}
+	else if (clockMode == 24){
+		this->config->worldClock = "true";
+	}
+	
+	interval::syncClock();
+	
+	if (field == '0'){
+		interval::print('c', false, false, false);	//set disphour and dispmin to false, and label to false
+	}
+	else if (field == 's' || field == 'h' || field == 'm'){
+		interval::printField('c', field);
+	}
+	else {
+		std::cerr << "Error: Invalid field [interval::printTime]" << std::endl;
+		std::exit(1);
+	}
+}
+
+void interval::setClock(int h, int m, int s, char dayHalf){
 	if (s > 59){
 		m = m + (s / 60);
 		s = s % 60;
@@ -55,7 +132,6 @@ void interval::setClock(int h, int m, int s, char dayHalf){
 		m = m % 60;
 	}
 	
-	
 	this->currClock->hour = h;
 	this->currClock->min = m;
 	this->currClock->sec = s;
@@ -64,10 +140,9 @@ void interval::setClock(int h, int m, int s, char dayHalf){
 		std::cout << "[v] -> Clock time set successfully [interval::interval]" << std::endl;
 		std::cout << "[v] -> Hour: " << h << " Min: " << m << " Sec: " << s << " DayHalf: " << dayHalf << " [interval::setClock]" << std::endl;
 	}
-	
 }
 
-void interval::syncClock(bool wc, std::string zone){	//make adjustments later for time zone
+void interval::syncClock(){	//make adjustments later for time zone
 	//used by time library to return a time struct:
 	struct tm * ptm;
 	time_t curTime;
@@ -76,17 +151,12 @@ void interval::syncClock(bool wc, std::string zone){	//make adjustments later fo
 	time(&rawTime);
 	ptm = gmtime(&rawTime);
 	
-	if (zone == "none"){
-		this->currClock->hour = (ptm->tm_hour + ConvertLib::timeMod(config->timeZone)); //uses function from convert library - returns time zone modifier
-	}
-	else {
-		this->currClock->hour = (ptm->tm_hour + ConvertLib::timeMod(zone)); 
-	}
+	this->currClock->hour = (ptm->tm_hour + ConvertLib::timeMod(this->config->timeZone)); //uses function from convert library - returns time zone modifier
 	
 	if (this->currClock->hour < 0){
 		this->currClock->hour = this->currClock->hour + 24;
 	}
-	if (this->config->worldClock == "false" || wc == false){
+	if (this->config->worldClock == "false"){
 		if (this->currClock->hour == 12){
 			this->currClock->dayHalf = 'P';
 		}

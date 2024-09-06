@@ -8,14 +8,15 @@ void help(){
 	<< "IMPORTANT: Only one time option can be used at a time." << std::endl << std::endl;	
 	
 	std::cout << "MonoArgument Commands: " << std::endl
-	<< " version : version and publish information" << std::endl
-	<< " help : basic commands and usage" << std::endl
-	<< " config: edit config file" << std::endl
-	<< " repair: regenerate config file" << std::endl
-	<< " codes: list program error codes" << std::endl
-	<< " print [timezone] [12]: returns the current system time." << std::endl
-	<< "	Timezone field will convert the time to a given timezone. " << std::endl
-	<< "	'12' feild will convert 24h time to 12h." << std::endl << std::endl;
+	<< " --version : version and publish information" << std::endl
+	<< " --help : basic commands and usage" << std::endl
+	<< " --config: edit config file" << std::endl
+	<< " --repair: regenerate config file" << std::endl
+	<< " --codes: list program error codes" << std::endl
+	<< " --print -[field option] --[timezone] [format option]: returns the current system time." << std::endl
+	<< "	-[field opiton]: optional field ex:[h, m, s]" << std::endl
+	<< "	-[timezone]: optional timezone convertion ex:[EDT,EST,PDT] See supported timezones in README.md" << std::endl
+	<< "	[format option]: optional format specifier: [12,24]. Adding [12] for example will switch the clock to 12 hour time." << std::endl;
 	
 	std::cout << "PolyArgument Commands: " << std::endl;
 	std::cout << "Modes: " << std::endl;
@@ -106,7 +107,10 @@ void version(){
 //if the program is acompanied by arguments, they are looped through.
 //boolean switches are used to store the state of arguments.
 int main(int argc, char *argv[]){
-	//initialize switch variables
+	//counter variables for parsing argv array:
+	int opCounter = 1;
+	int modeCounter = 2;
+	//initialize switch variables:
 	bool quiet = false;
 	bool fullQuiet = false;
 	bool printTime = false;
@@ -120,79 +124,98 @@ int main(int argc, char *argv[]){
 	bool hourOP = false;
 	bool dispH = false;
 	bool dispM = false;
-	
-	char dayHalf;
+	//clock value variables:
+	int clockMode = 0;		//stores 12h or 24h
 	int minVal = 0;
 	int secVal = 0;
 	int hourVal = 0;
-	
+	//Variables for mode functions:
 	std::string dayHalfSTR;
+	char field = '0';	//used for print option
+	char dayHalf;		//am or pm
 	//Used to modify timezone for main print option.
-	std::string tempZone = "";		
 	int worldClock = true;
+	
 	
 
 	if (argc > 0){
 		for (int i = 1; i < argc; i++){
 			for (int x = 0; x < sizeof(argv[i])/sizeof(char); x++){
-				if (argv[i][x] == 'h' && argv[i][x+1] == 'e'){
-					help();
-					return 0;
-				}
-				if (argv[i][x] == 'v' && argv[i][x+1] == 'e' && argv[i][x+2] == 'r'){
-					version();
-					return 0;
-				}
-				if (argv[i][x] == 'r' && argv[i][x+1] == 'e' && argv[i][x+2] == 'p' && argv[i][x+3] == 'a'){
-					repair();
-					return 0;
-				}
-				if (argv[i][x] == 'c' && argv[i][x+1] == 'o' && argv[i][x+2] == 'd' && argv[i][x+3] == 'e'){
-					errorCodes();
-					return 0;
-				}
-				if (argv[i][x] == 'c' && argv[i][x+1] == 'o' && argv[i][x+2] == 'n' && argv[i][x+3] == 'f'){
-					editConfig = true;
-					break;
-				}
-				if (argv[i][x] == 'p' && argv[i][x+1] == 'r' && argv[i][x+2] == 'i'){
-					printTime = true;
-				}
-				if (argv[i][x] == 'F' && argv[i][x+1] == 'Q'){
-					fullQuiet = true;
-				}
-				if (argv[i][x] == 'q'){
-					fullQuiet = true;
-					quiet = true;
-				}
-				if (argv[i][x] == 'v'){
-					verbose = true;
-				}
-				if (argv[i][x] == 'a'){
-					alarm = true;
-				}
-				if (argv[i][x] == 'w'){
-					stopwatch = true;
-				}
-				if (argv[i][x] == 't'){
-					timer = true;
-				}
-				if (argv[i][x] == 'm'){
-					minOP = true;
-				}
-				if (argv[i][x] == 's'){
-					secOP = true;
-				}
-				if (argv[i][x] == 'h'){
-					hourOP = true;
-				}
-				if (argv[i][x] == 'D' && argv[i][x+1] == 'M'){
-					dispM = true;
-				}
-				if (argv[i][x] == 'D' && argv[i][x+1] == 'H'){
-					dispH = true;
-				}
-				if (printTime == false && ConvertLib::isDigit(argv[i][x]) && secVal == 0 && minVal == 0 && hourVal == 0){
+				if (argv[i][x] == '-'){
+					while (ConvertLib::isLetter(argv[i][x + opCounter]) == true){
+						if (argv[i][x+opCounter] == 'F' && argv[i][x+opCounter+2] == 'Q'){
+							fullQuiet = true;
+						}
+						if (argv[i][x+opCounter] == 'D' && argv[i][x+opCounter+1] == 'H'){
+							dispH = true;
+						}
+						
+						if (argv[i][x + opCounter] == 'q'){
+							fullQuiet = true;
+							quiet = true;
+						}
+						else if (argv[i][x + opCounter] == 'v'){
+							verbose = true;
+						}
+						else if (argv[i][x + opCounter] == 'a'){
+							alarm = true;
+						}
+						else if (argv[i][x + opCounter] == 'w'){
+							stopwatch = true;
+						}
+						else if (argv[i][x + opCounter] == 't'){
+							timer = true;
+						}
+						else if (argv[i][x + opCounter] == 'm'){
+							minOP = true;
+						}
+						else if (argv[i][x + opCounter] == 's'){
+							secOP = true;
+						}
+						else if (argv[i][x + opCounter] == 'h'){
+							hourOP = true;
+						}
+						else if (argv[i][x + opCounter] == 'D' && argv[i][x+1+opCounter] == 'M'){
+							dispM = true;
+						}
+						
+						opCounter++;
+					}
+					
+					opCounter = 1;
+				}	//closing option if statement
+				
+				if (argv[i][x] == '-' && argv[i][x+1] == '-'){
+					while (ConvertLib::isLetter(argv[i][x + modeCounter]) == true){
+						if (argv[i][x + modeCounter] == 'h' && argv[i][x + 1 + modeCounter] == 'e'){
+							help();
+							return 0;
+						}
+						else if (argv[i][x+modeCounter] == 'v' && argv[i][x+1+modeCounter] == 'e' && argv[i][x+2+modeCounter] == 'r'){
+							version();
+							return 0;
+						}
+						else if (argv[i][x+modeCounter] == 'r' && argv[i][x+1+modeCounter] == 'e' && argv[i][x+2+modeCounter] == 'p' && argv[i][x+3+modeCounter] == 'a'){
+							repair();
+							return 0;
+						}
+						else if (argv[i][x+modeCounter] == 'c' && argv[i][x+1+modeCounter] == 'o' && argv[i][x+2+modeCounter] == 'd' && argv[i][x+3+modeCounter] == 'e'){
+							errorCodes();
+							return 0;
+						}
+						else if (argv[i][x+modeCounter] == 'c' && argv[i][x+1+modeCounter] == 'o' && argv[i][x+2+modeCounter] == 'n' && argv[i][x+3+modeCounter] == 'f'){
+							editConfig = true;
+						}
+						else if (argv[i][x+modeCounter] == 'p' && argv[i][x+1+modeCounter] == 'r' && argv[i][x+2+modeCounter] == 'i'){
+							printTime = true;
+						}
+					
+					modeCounter++;
+					}
+				modeCounter = 2;
+				}	//closing mod if statement
+				
+				if (ConvertLib::isDigit(argv[i][x]) && secVal == 0 && minVal == 0 && hourVal == 0 && clockMode == 0){
 					if (secOP == true){
 						secVal = ConvertLib::charToInt(argv[i]);
 					}
@@ -202,15 +225,17 @@ int main(int argc, char *argv[]){
 					else if (hourOP == true){
 						hourVal = ConvertLib::charToInt(argv[i]);
 					}
+					else if (printTime == true){
+						clockMode = ConvertLib::charToInt(argv[i]);
+					}
 					else {
 						std::cerr << "Error: Too many arguments or argument order [main]" << std::endl;
 						return 1;
 					}
-				}
+				}	//closing digit if statement
 				
-			}
-		//bracket to close for loop
-		}
+			}//bracket to close child for loop
+		}//bracket to close parent for loop
 		
 		
 		//create interval object using argument values:
@@ -219,21 +244,16 @@ int main(int argc, char *argv[]){
 		
 		//check if mode arguments exist.
 		if (printTime == true){
-			if (argc > 2){
-				for (int i = 0; i < 3; i++){
-					tempZone = tempZone + ConvertLib::upper(argv[2][i]);
-				}
-				if (argc > 3){
-					if (argv[3][0] == '1' && argv[3][1] == '2'){
-						worldClock = false;
-					}
-					else {
-						worldClock = true;
-					}
-				}
+			if (hourOP == true){
+				field = 'h';
 			}
-			clock.syncClock(worldClock, tempZone);
-			clock.print('c', false, false, false);	//set disphour and dispmin to false, and label to false
+			if (minOP == true){
+				field = 'm';
+			}
+			if (secOP == true){
+				field = 's';
+			}
+			clock.printTime(argv, argc, field, clockMode);
 			return 0;
 		}
 		

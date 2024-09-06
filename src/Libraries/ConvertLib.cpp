@@ -46,6 +46,18 @@ namespace ConvertLib {
 		return digits[num];
 	}
 	
+	bool isLetter(char i){
+		if (i >= 97 && i <= 122){
+			return true;
+		}
+		else if (i <= 65 && i >= 90){
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
 	char upper(char i){
 		if (i >= 97 && i <= 122){
 			return i - 32;
