@@ -50,7 +50,7 @@ namespace ConvertLib {
 		if (i >= 97 && i <= 122){
 			return true;
 		}
-		else if (i <= 65 && i >= 90){
+		else if (i >= 65 && i <= 90){
 			return true;
 		}
 		else {

@@ -102,6 +102,45 @@ void version(){
 	<< "Publisher: Nolan Provencher" << std::endl;
 }
 
+void printCommand(int argc, char *argv[]){
+	for (int Array = 0; Array < argc; Array++){
+		for (int Char = 0; Char < sizeof(*argv)/sizeof(char); Char++){
+			std::cout << argv[Array][Char];
+		}
+		std::cout << std::endl;
+	}
+
+}
+
+void checkSyntax(int argc, char *argv[]){
+	int counter = 0;
+
+	for (int Array = 1; Array < argc; Array++){
+		
+		for (int Char = 0; Char < sizeof(*argv)/sizeof(char); Char++){
+			if (ConvertLib::isLetter(argv[Array][Char]) == true){
+				while (ConvertLib::isLetter(argv[Array][Char + counter]) == true){
+					counter++;
+				}
+				std::cout << counter << " + " << argv[Array][Char] << std::endl;
+				if (counter > 1){
+					if (ConvertLib::isLetter(argv[Array][Char-1]) == false && argv[Array][Char-1] != '-' && argv[Array][Char-2] != '-'){
+						std::cerr << "Syntax Error: options missing '--' ?" << std::endl;
+						std::exit(6);
+					}
+				}
+				else {
+					if (ConvertLib::isLetter(argv[Array][Char-1]) == false && argv[Array][Char - 1] != '-'){
+						std::cerr << "Syntax Error: options missing '-' ?" << std::endl;
+						std::exit(6);
+					}
+				}
+				counter = 0;
+			}
+		}
+	}
+}
+
 
 //argc is length of argv array; 0 is the name of program
 //if the program is acompanied by arguments, they are looped through.
@@ -136,12 +175,15 @@ int main(int argc, char *argv[]){
 	//Used to modify timezone for main print option.
 	int worldClock = true;
 	
-	
-
+	//FOR DEBUGGING:
+	//printCommand(argc,argv);
+	//syntax check:
+	//checkSyntax(argc,argv);			//FUNCTION IN PROGRESS
+	//set option flags:
 	if (argc > 0){
 		for (int i = 1; i < argc; i++){
 			for (int x = 0; x < sizeof(argv[i])/sizeof(char); x++){
-				if (argv[i][x] == '-'){
+				if (argv[i][x] == '-' && argv[i][x+1] != '-' && argv[i][x-1] != '-'){
 					while (ConvertLib::isLetter(argv[i][x + opCounter]) == true){
 						if (argv[i][x+opCounter] == 'F' && argv[i][x+opCounter+2] == 'Q'){
 							fullQuiet = true;
@@ -215,25 +257,27 @@ int main(int argc, char *argv[]){
 				modeCounter = 2;
 				}	//closing mod if statement
 				
-				if (ConvertLib::isDigit(argv[i][x]) && secVal == 0 && minVal == 0 && hourVal == 0 && clockMode == 0){
-					if (secOP == true){
-						secVal = ConvertLib::charToInt(argv[i]);
-					}
-					else if (minOP == true){
-						minVal = ConvertLib::charToInt(argv[i]);
-					}
-					else if (hourOP == true){
-						hourVal = ConvertLib::charToInt(argv[i]);
-					}
-					else if (printTime == true){
-						clockMode = ConvertLib::charToInt(argv[i]);
+				if (ConvertLib::isDigit(argv[i][x]) == true){
+					if (printTime == true){
+						if (clockMode == 0){
+							clockMode = ConvertLib::charToInt(argv[i]);
+						}
 					}
 					else {
-						std::cerr << "Error: Too many arguments or argument order [main]" << std::endl;
-						return 1;
+						if (secVal == 0 && minVal == 0 && hourVal == 0){
+							if (secOP == true){
+								secVal = ConvertLib::charToInt(argv[i]);
+							}
+							else if (minOP == true){
+								minVal = ConvertLib::charToInt(argv[i]);
+							}
+							else if (hourOP == true){
+								hourVal = ConvertLib::charToInt(argv[i]);
+							}
+						}
 					}
-				}	//closing digit if statement
-				
+				}//close isdigit if statement
+			
 			}//bracket to close child for loop
 		}//bracket to close parent for loop
 		

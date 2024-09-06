@@ -39,4 +39,5 @@ Intervalcli Exit Codes:
 	2: Unable to delete config file.
 	3: Unable to write to config file.
 	5: Clock dayHalf variable is invalid.
+	6: Invalid syntax.
 	
