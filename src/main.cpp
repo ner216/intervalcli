@@ -96,9 +96,9 @@ void errorCodes(){
 }
 
 void version(){
-	std::cout << "VERSION 1.8.0" << std::endl
+	std::cout << "VERSION 1.8.5" << std::endl
 	<< "Date Originally Published: 8-17-24" << std::endl
-	<< "Date of most recent update: 9-5-24" << std::endl
+	<< "Date of most recent update: 9-6-24" << std::endl
 	<< "Publisher: Nolan Provencher" << std::endl;
 }
 
