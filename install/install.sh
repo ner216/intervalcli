@@ -1,7 +1,11 @@
 #!/bin/bash
+
+#CUSTOM INSTALATION VARIABLES (File must be located in src directory):
+alarmFile="TimeToStop.mp3"
+
+#Definition variables (Don't modify below this point):
 srcFile="intervalcli"
 configFile="/etc/IntervalConfig.conf"
-alarmFile="alarm.mp3"
 #flag variables for installCheck
 uninstall=false
 cancel=false
@@ -54,7 +58,7 @@ installBin(){
 	sudo echo "[TimeZone]" >> /etc/IntervalConfig.conf
 	sudo echo "EDT" >> /etc/IntervalConfig.conf
 	sudo echo "[SoundDir]" >> /etc/IntervalConfig.conf
-	sudo echo "/usr/share/sounds/alsa/alarm.mp3" >> /etc/IntervalConfig.conf
+	sudo echo "/usr/share/sounds/alsa/$alarmFile" >> /etc/IntervalConfig.conf
 	sudo echo "[24HourClock]" >> /etc/IntervalConfig.conf
 	sudo echo "true" >> /etc/IntervalConfig.conf
 	sudo echo "[Editor]" >> /etc/IntervalConfig.conf
@@ -69,18 +73,16 @@ installBin(){
 
 installDepDNF(){
 	#install dependancies
-	printf 'Updating repos...\n'
-	dnf upgrade --refresh
-	printf 'Installing [mpg123,CMAKE,g++,gcc]...\n'
-	dnf install mpg123 cmake g++ gcc
+	printf 'Installing [mpg123,CMAKE,g++]...\n'
+	dnf install mpg123 cmake g++
 
 }
 
 installDepAPT(){
 	printf 'Updating repos...\n'
 	apt update
-	printf 'Installing [mpg123,CMAKE,g++,gcc]...\n'
-	apt install mpg123 cmake g++ gcc
+	printf 'Installing [mpg123,CMAKE,g++]...\n'
+	apt install mpg123 cmake g++
 
 }
 
