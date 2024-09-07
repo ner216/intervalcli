@@ -297,5 +297,6 @@ bool interval::getConfWorldClock() const {
 }
 
 void interval::playAlarm() const{
+	std::system(". /usr/bin/SendTimerNotification.sh");
 	std::system(config->soundDir.c_str());
 }

@@ -1,0 +1,110 @@
+NAME
+	intervalcli - Timer, Alarm, Stopwatch, Clock tool
+
+SYNOPSIS
+	intervalcli --[long options] -[options] [single time value]
+
+DESCRIPTION
+	The program can run a timer of specified time.
+	The program can set an alarm for a specified time.
+	The program can start a stopwatch from a specified time or from zero.
+
+	MODES:
+		Timer
+		Alarm
+		Stopwatch
+		Print
+
+	Different options or long options may be required depending on the mode.
+
+	--help
+		Return help message showing commands and options
+
+	--version
+		Return program version information
+
+	--config
+		Launch config editor of program config file (requires root)
+
+	--repair
+		Delete and regenerate program config file (requires root)
+
+	--codes
+		Return a list of program exit codes
+
+	--print
+		Returns system time according to settings in config file. Options can be added to manipulate output as shown:
+			--[time zone abreviation]
+				Converts returned time to specified time zone. Ex: PDT, EST, PST...
+			-[field]
+				Only returns specified field. field may be 's' for second, 'm' for minute, or 'h' for hour
+			[time format]
+				Converts returned time to 12 hour or 24 hour format. This option is not preceded by a '-'.
+				This option can either be entered as '12' or '24'.
+
+	-t
+		Run interval in timer mode
+
+	-a
+		Run interval in alarm mode
+
+	-w
+		Run interval in stopwatch mode
+
+	-m
+		If used with '--print':
+			Returns minute value only
+		Otherwise:
+			Sets time value to minute value
+
+	-s
+		If used with '--print':
+			Returns second value only
+		Otherwise:
+			Sets time value to second value
+
+	-h
+		If used with '--print':
+			Returns hour value only
+		Otherwise:
+			Sets time value to hour value
+
+	-DM
+		Displays fields up to the minute field, then trunkates the rest.
+
+	-DH
+		Displays fields up to the hour field, then trunkates the rest.
+
+	-q
+		Sets interval to quiet output mode. Only outputs 'Timer running...'
+
+	-FQ
+		Sets interval to full quiet mode where there is not output to console
+
+	-v
+		Sets interval to verbose mode.
+
+	[single time value]
+		At the end of a command, a positive integer can be entered as the timer or stopwatch time.
+		This value's repreasentation is determined by '-h', '-m', '-s' options.
+
+USAGE EXAMPLES
+	Set a timer for 30 minutes:
+		intervalcli -t -m 30
+
+	Print time in 12H format:
+		intervalcli --print 12
+
+	Print time hour value in 12H format for PDT timezone:
+		intervalcli --print -h --PDT 12
+
+	Start stopwatch at 1 hour:
+		intervalcli -w -h 1
+
+	Start alarm mode with verbose:
+		intervalcli -a -v
+
+AUTHOR
+	Written by Nolan D. Provencher
+
+
