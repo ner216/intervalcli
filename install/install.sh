@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #CUSTOM INSTALATION VARIABLES (File must be located in src directory):
-alarmFile="TimeToStop.mp3"
+alarmFile="alarm.mp3"
 
 #Definition variables (Don't modify below this point):
 srcFile="intervalcli"
