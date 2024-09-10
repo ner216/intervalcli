@@ -1,54 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include "interval.h"
-
-void help(){
-	std::cout << "Order of options is not enforced and option fields are not all required." << std::endl
-	<< "For example; a misc option is not required for usage." << std::endl << std::endl
-	<< "IMPORTANT: Only one time option can be used at a time." << std::endl << std::endl;	
-	
-	std::cout << "MonoArgument Commands: " << std::endl
-	<< " --version : version and publish information" << std::endl
-	<< " --help : basic commands and usage" << std::endl
-	<< " --config: edit config file" << std::endl
-	<< " --repair: regenerate config file" << std::endl
-	<< " --codes: list program error codes" << std::endl
-	<< " --print -[field option] --[timezone] [format option]: returns the current system time." << std::endl
-	<< "	-[field opiton]: optional field ex:[h, m, s]" << std::endl
-	<< "	-[timezone]: optional timezone convertion ex:[EDT,EST,PDT] See supported timezones in README.md" << std::endl
-	<< "	[format option]: optional format specifier: [12,24]. Adding [12] for example will switch the clock to 12 hour time." << std::endl;
-	
-	std::cout << "PolyArgument Commands: " << std::endl;
-	std::cout << "Modes: " << std::endl;
-	std::cout << " -t : timer" << std::endl
-	<< " -w : stopwatch" << std::endl
-	<< " -a : Alarm" << std::endl;
-	
-	std::cout << "Time Options: " << std::endl
-	<< " -m : minute" << std::endl
-	<< " -s : seconds" << std::endl
-	<< " -h : hours" << std::endl
-	<< " -DM : display values [hours][minutes]" << std::endl
-	<< " -DH : display values [hours]" << std::endl
-	<< " -q : only display label [Timer running...] " << std::endl
-	<< " -FQ : show no output to console" << std::endl;
-	
-	
-	std::cout << "Misc Options: " << std::endl
-	<< " -v : verbose" << std::endl;
-	
-	std::cout << "Usage Examples: " << std::endl;
-	std::cout << " [COMMAND] -[MODE] -[TIME_OPTION] -[MISC_OPTION] [TIMEVALUE]" << std::endl
-	<< " EX: [COMMAND] -t -m 40" << std::endl
-	<< " EX: [COMMAND] tm 40" << std::endl
-	<< "	sets a timer for 40 minutes" << std::endl
-	<< " EX: [COMMAND] print PDT 12" << std::endl
-	<< "	returns the time converted to 12h format in the PDT timezone" << std::endl;
-}
+#include "Libraries/Msg.h"
 
 void repair(){
-	std::string config = "/etc/IntervalConfig.conf";
-	//delete config file:
+        std::string config = "/etc/IntervalConfig.conf";
+        //delete config file:
 	try {
 		if (std::filesystem::remove(config)){
 			std::cout << "Old config file successfully deleted" << std::endl;
@@ -85,21 +42,6 @@ void repair(){
 	
 	newConf.close();
 	
-}
-
-void errorCodes(){
-	std::cout << "Error Codes:" << std::endl
-	<< "1 : Unable to open configuration file." << std::endl
-	<< "2 : Values in config file are not valid." << std::endl
-	<< "3 : Unable to modify config file." << std::endl
-	<< "4 : Invalid input time." << std::endl;
-}
-
-void version(){
-	std::cout << "VERSION 1.8.8" << std::endl
-	<< "Date Originally Published: 8-17-24" << std::endl
-	<< "Date of most recent update: 9-6-24" << std::endl
-	<< "Publisher: Nolan Provencher" << std::endl;
 }
 
 void printCommand(int argc, char *argv[]){
@@ -230,11 +172,11 @@ int main(int argc, char *argv[]){
 				if (argv[i][x] == '-' && argv[i][x+1] == '-'){
 					while (ConvertLib::isLetter(argv[i][x + modeCounter]) == true){
 						if (argv[i][x + modeCounter] == 'h' && argv[i][x + 1 + modeCounter] == 'e'){
-							help();
+							Msg::help();
 							return 0;
 						}
 						else if (argv[i][x+modeCounter] == 'v' && argv[i][x+1+modeCounter] == 'e' && argv[i][x+2+modeCounter] == 'r'){
-							version();
+							Msg::version();
 							return 0;
 						}
 						else if (argv[i][x+modeCounter] == 'r' && argv[i][x+1+modeCounter] == 'e' && argv[i][x+2+modeCounter] == 'p' && argv[i][x+3+modeCounter] == 'a'){
@@ -242,7 +184,7 @@ int main(int argc, char *argv[]){
 							return 0;
 						}
 						else if (argv[i][x+modeCounter] == 'c' && argv[i][x+1+modeCounter] == 'o' && argv[i][x+2+modeCounter] == 'd' && argv[i][x+3+modeCounter] == 'e'){
-							errorCodes();
+							Msg::codes();
 							return 0;
 						}
 						else if (argv[i][x+modeCounter] == 'c' && argv[i][x+1+modeCounter] == 'o' && argv[i][x+2+modeCounter] == 'n' && argv[i][x+3+modeCounter] == 'f'){

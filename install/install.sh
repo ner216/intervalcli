@@ -7,6 +7,7 @@ alarmFile="alarm.mp3"
 srcFile="intervalcli"
 configFile="/etc/IntervalConfig.conf"
 notificationScript="SendTimerNotification.sh"
+manual="intervalcli.1.gz"
 #flag variables for installCheck
 uninstall=false
 cancel=false
@@ -14,6 +15,7 @@ install=false
 srcPresent=false
 configPresent=false
 scriptPresent=false
+manPresent=false
 release=$(grep ^ID= /etc/os-release)
 
 installBin(){
@@ -27,6 +29,9 @@ installBin(){
 	fi
 	#copy files from download to respective places
 	printf 'Copying files...\n'
+	cd ..
+	cd Documentation
+	cp $manual /usr/share/man/man1/
 	cd ..
 	cd src/
 	cp Scripts/$notificationScript /usr/bin/
@@ -77,15 +82,15 @@ installBin(){
 installDepDNF(){
 	#install dependancies
 	printf 'Installing [mpg123,CMAKE,g++,libnotify-dev]...\n'
-	dnf install mpg123 cmake g++ libnotify-dev
+	dnf install mpg123 cmake g++ libnotify-devel.x86_64
 
 }
 
 installDepAPT(){
 	printf 'Updating repos...\n'
 	apt update
-	printf 'Installing [mpg123,CMAKE,g++,libnotify-dev]...\n'
-	apt install mpg123 cmake g++ libnotify-dev
+	printf 'Installing [mpg123,CMAKE,g++,libnotify]...\n'
+	apt install cmake g++ libnotify-dev mpg123.x86_64
 
 }
 
@@ -97,11 +102,16 @@ installCheck(){
 	if [ -f $configFile ]; then
 		configPresent=true
 	fi
+	
 	if [ -f /usr/bin/$notificationScript ]; then
 		scriptPresent=true
 	fi
 	
-	if [ $srcPresent == true ]||[ $configPresent == true ]||[ $scriptPresent == true ]; then
+	if [ -f /usr/share/man/man1/$manual ]; then
+		manPresent=true
+	fi
+	
+	if [ $srcPresent == true ]||[ $configPresent == true ]||[ $scriptPresent == true ]||[ $manPresent == true ]; then
 		printf 'Warning: install files already present on system!\nIf this program has not been installed previousely, Cancel install!\n'
 		read -p "Enter install, cancel, or remove: " choice
 		if [ $choice == 'remove' ]; then
@@ -136,7 +146,7 @@ fi
 if [ $(id -u) == 0 ]; then
 	if [ $uninstall == true ]; then
 		printf "This action will: \n"
-		printf "  Delete mpg123\n  Delete $configFile\n  Delete /usr/share/sounds/alsa/$alarmFile\n  Delete /usr/bin/$srcFile\n  Delete /usr/bin/$notificationScript\n"
+		printf "  Delete mpg123\n  Delete $configFile\n  Delete /usr/share/sounds/alsa/$alarmFile\n  Delete /usr/bin/$srcFile\n  Delete /usr/bin/$notificationScript\n  Delete /usr/share/man/man1/$manual\n"
 		read -p "Proceed? (y,N)> " choice
 		if [ $choice == 'y' ]; then
 			if [ $release == "ID=fedora" ]; then
@@ -153,14 +163,16 @@ if [ $(id -u) == 0 ]; then
 		rm /etc/IntervalConfig.conf
 		echo "Removeing audio sound effect..."
 		rm /usr/share/sounds/alsa/alarm.mp3
-		echo "Removing binaries..."
+		echo "Removing binaries & scripts..."
 		rm /usr/bin/$notificationScript
 		rm /usr/bin/$srcFile
+		echo "Removing manual..."
+		rm /usr/share/man/man1/$manual
 		echo "Done"
 	elif [ $install == true ]; then
 		printf "This action will: \n"
 		printf "  Install $configFile\n  Install /usr/share/sounds/alsa/$alarmFile\n  Install /usr/bin/$srcFile\n"
-		printf "  Install mpg123\n  Install CMAKE\n  Install Make\n  Install g++\n  Install gcc\n  Install libnotify-dev\n  Install /usr/bin/$notificationScript\n"
+		printf "  Install mpg123\n  Install CMAKE\n  Install Make\n  Install g++\n  Install gcc\n  Install libnotify-dev\n  Install /usr/bin/$notificationScript\n  Install /usr/share/man/man1/$manual\n"
 		read -p "Proceed? (y,N)> " choice
 		if [ $choice == 'y' ]; then
 			if [ $release == "ID=fedora" ]; then
