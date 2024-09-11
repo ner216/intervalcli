@@ -33,6 +33,8 @@ Installer Exit Codes:
 	1: Script does not have root.
 	2: Config file already present and not removed.
 	3: Unknown distrobution.
+	4: Missing directories of files in package
+	5: Could not make directory
 	
 Intervalcli Exit Codes:
 	1: Invalid input time / input time out of range.

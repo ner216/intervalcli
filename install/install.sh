@@ -30,17 +30,39 @@ installBin(){
 	#copy files from download to respective places
 	printf 'Copying files...\n'
 	cd ..
-	cd Documentation
-	cp $manual /usr/share/man/man1/
-	cd ..
-	cd src/
-	cp Scripts/$notificationScript /usr/bin/
-	if [ -d build ]; then
-		echo "Removing build directory..."
-		rm -r build
+	if [ -d Documentation ]; then
+		cd Documentation
+		if [ -f $manual ]; then
+			cp $manual /usr/share/man/man1/
+			cd ..
+		else
+			echo "Error: $manual file does not exist"
+			exit 4
+		fi
+	else
+		echo "Error: Documentation directory does not exist"
+		exit 4
+	fi	
+	
+	if [ -d src ]; then
+		cd src/
+		cp Scripts/$notificationScript /usr/bin/
+		if [ -d build ]; then
+			echo "Removing build directory..."
+			rm -r build
+		fi
+		
+	else
+		echo "Error: src directory does not exist"
+		exit 4
 	fi
+	
 	echo "Creating build directory..."
 	mkdir build
+	if ! [ -d build ]; then
+		echo "Error: could not make build directory"
+		exit 5
+	fi
 	cd build/
 	#rebuild the project for the system:
 	cmake ..
@@ -48,7 +70,11 @@ installBin(){
 	#copy binary to bin:
 	cp $srcFile /usr/bin/
 	cd ..
-	cp $alarmFile /usr/share/sounds/alsa/
+	if [ -f $alarmFile ]; then
+		cp $alarmFile /usr/share/sounds/alsa/
+	else
+		echo "Error: could not copy sound file"
+	fi
 	printf 'Successfully copied binary files\n'
 
 	#create config file
