@@ -98,22 +98,23 @@ void Clock::incSec(){
 void Clock::decSec(){
 	this->sec = this->sec - 1;
 	
-	if (this->sec < 1){
+	if (this->sec <= 0){
 		if (this->min > 0){
 			this->sec = 59;
 			this->min = this->min - 1;
 		}
 		else {
 			if (this->hour > 0){
-				this->min = 59;
+				this->min = 58;
+				this->sec = 59;
 				this->hour = this->hour - 1;
 				if (this->worldClock == "true"){
-					if (this->hour == 0){
+					if (this->hour < 0){
 						this->hour = 24;
 					}
 				}
 				else {
-					if (this->hour < 1){
+					if (this->hour < 0){
 						this->hour = 12;
 						if (this->dayHalf == 'A'){
 							this->dayHalf = 'P';

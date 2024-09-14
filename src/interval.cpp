@@ -253,7 +253,6 @@ void interval::countDown(bool quiet, bool Hour, bool Min, bool Label){
 	bool alarm = false;
 
 	while (alarm == false){
-		this->currClock->decSec();
 		if (*alarmClock == *currClock){
 			alarm = true;
 			if (this->verbose){
@@ -263,6 +262,8 @@ void interval::countDown(bool quiet, bool Hour, bool Min, bool Label){
 			interval::playAlarm();
 			break;
 		}
+
+		this->currClock->decSec();
 
 		if (quiet == false){
 			if (this->verbose == false){
@@ -276,13 +277,13 @@ void interval::countDown(bool quiet, bool Hour, bool Min, bool Label){
 
 void interval::stopwatch(bool quiet, bool Hour, bool Min, bool Label){
 	while (true){
-		this->currClock->incSec();
 		if (quiet == false){
 		if (this->verbose == false){
 			std::system("clear");
 		}
 		interval::print('c', Hour, Min, Label);
 		}
+		this->currClock->incSec();
 		sleep(1.1);
 	}
 }

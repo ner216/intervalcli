@@ -127,7 +127,7 @@ int main(int argc, char *argv[]){
 			for (int x = 0; x < sizeof(argv[i])/sizeof(char); x++){
 				if (argv[i][x] == '-' && argv[i][x+1] != '-' && argv[i][x-1] != '-'){
 					while (ConvertLib::isLetter(argv[i][x + opCounter]) == true){
-						if (argv[i][x+opCounter] == 'F' && argv[i][x+opCounter+2] == 'Q'){
+						if (argv[i][x+opCounter] == 'F' && argv[i][x+opCounter+1] == 'Q'){
 							fullQuiet = true;
 						}
 						if (argv[i][x+opCounter] == 'D' && argv[i][x+opCounter+1] == 'H'){
