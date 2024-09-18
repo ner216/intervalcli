@@ -60,6 +60,9 @@ void checkSyntax(int argc, char *argv[]){
 	bool shellFlags[5] = {false, false, false, false, false};
 	bool verbose = false;
 	bool ifSHELL = false;
+	bool longOption = false;
+	bool badOption = false;		
+	bool badLongOption = false;	
 	int counter = 0;
 
 	for (int Array = 1; Array < argc; Array++){
@@ -68,31 +71,50 @@ void checkSyntax(int argc, char *argv[]){
 				break;
 			}
 			if (ConvertLib::isLetter(argv[Array][Char]) == true){
-				while (ConvertLib::isLetter(argv[Array][Char + counter]) == true){
-					counter++;
+				if (ConvertLib::lower(argv[Array][Char]) == 'p' && ConvertLib::lower(argv[Array][Char+1]) == 'r' && ConvertLib::lower(argv[Array][Char+2]) == 'i' && ConvertLib::lower(argv[Array][Char+3]) == 'n' && ConvertLib::lower(argv[Array][Char+4]) == 't'){
+					longOption = true;
 				}
-				if (verbose) {
-					std::cout << counter << " + " << argv[Array][Char] << std::endl;
-					std::cout << "here " << counter << " " << argv[Array][Char] << std::endl;
+				if (ConvertLib::lower(argv[Array][Char]) == 'c' && ConvertLib::lower(argv[Array][Char+1]) == 'o' && ConvertLib::lower(argv[Array][Char+2]) == 'n' && ConvertLib::lower(argv[Array][Char+3]) == 'f' && ConvertLib::lower(argv[Array][Char+4]) == 'i'){
+					longOption = true;
 				}
-				if (counter > 1){
-					if (ConvertLib::isLetter(argv[Array][Char-1]) == false){
-						if (argv[Array][Char-1] != '-' || argv[Array][Char-2] != '-'){
-							std::cerr << "Syntax Error: options missing '--' ?" << std::endl;
-							std::exit(6);
-						}
+				if (ConvertLib::lower(argv[Array][Char]) == 'r' && ConvertLib::lower(argv[Array][Char+1]) == 'e' && ConvertLib::lower(argv[Array][Char+2]) == 'p' && ConvertLib::lower(argv[Array][Char+3]) == 'a' && ConvertLib::lower(argv[Array][Char+4]) == 'i'){
+					longOption = true;
+				}
+				if (ConvertLib::lower(argv[Array][Char]) == 'c' && ConvertLib::lower(argv[Array][Char+1]) == 'o' && ConvertLib::lower(argv[Array][Char+2]) == 'd' && ConvertLib::lower(argv[Array][Char+3]) == 'e'){
+					longOption = true;
+				}
+				if (ConvertLib::lower(argv[Array][Char]) == 'v' && ConvertLib::lower(argv[Array][Char+1]) == 'e' && ConvertLib::lower(argv[Array][Char+2]) == 'r' && ConvertLib::lower(argv[Array][Char+3]) == 's' && ConvertLib::lower(argv[Array][Char+4]) == 'i'){
+					longOption = true;
+				}
+				if (ConvertLib::lower(argv[Array][Char]) == 'h' && ConvertLib::lower(argv[Array][Char+1]) == 'e' && ConvertLib::lower(argv[Array][Char+2]) == 'l' && ConvertLib::lower(argv[Array][Char+3]) == 'p'){
+					longOption = true;
+				}
+					
+				if (longOption == true){
+					if (ConvertLib::isLetter(argv[Array][Char-1]) != false || argv[Array][Char-1] != '-' || argv[Array][Char-2] != '-'){
+						badLongOption = true;
 					}
 				}
-				else {
+
+				else if(longOption == false){
 					if (ConvertLib::isLetter(argv[Array][Char-1]) == false && argv[Array][Char-1] != '-'){
-						std::cerr << "Syntax Error: options missing '-' ?" << std::endl;
-						std::exit(6);
+						badOption = true;
 					}
 				}
+				longOption = false;
 				counter = 0;
 			}
 		}//close child for loop
 	}//close parent for loop
+	
+	if (badOption == true){
+		std::cerr << "Syntax Error: options missing '-' ?" << std::endl;
+		std::exit(6);
+	}
+	if (badLongOption == true){
+		std::cerr << "Syntax Error: options missing '--' ?" << std::endl;
+		std::exit(6);
+	}
 }
 
 

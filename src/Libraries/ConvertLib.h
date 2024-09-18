@@ -7,6 +7,7 @@ namespace ConvertLib {
 	
 	bool isLetter(char i);
 	char upper(char i);
+	char lower(char i);
 	bool isDigit(char val);
 	int powTen(int n);
 	int charToInt(char val[]);

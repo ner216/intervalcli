@@ -58,6 +58,15 @@ namespace ConvertLib {
 		}
 	}
 	
+	char lower(char i){
+		if (i >= 65 && i <= 90){
+			return i + 32;
+		}
+		else {
+			return i;
+		}
+	}
+	
 	char upper(char i){
 		if (i >= 97 && i <= 122){
 			return i - 32;
