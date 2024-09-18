@@ -55,32 +55,44 @@ void printCommand(int argc, char *argv[]){
 }
 
 void checkSyntax(int argc, char *argv[]){
+	const char shellText[5] = {'S', 'H', 'E', 'L', 'L'};
+	int shellTextIdx[5];
+	bool shellFlags[5] = {false, false, false, false, false};
+	bool verbose = false;
+	bool ifSHELL = false;
 	int counter = 0;
 
 	for (int Array = 1; Array < argc; Array++){
-		
-		for (int Char = 0; Char < sizeof(*argv)/sizeof(char); Char++){
+		for (int Char = 0; Char < sizeof(argv[Array])/sizeof(char); Char++){
+			if (argv[Array][Char] == 'S' && argv[Array][Char+1] == 'H' && argv[Array][Char+2] == 'E' && argv[Array][Char+3] == 'L' && argv[Array][Char+4] == 'L'){
+				break;
+			}
 			if (ConvertLib::isLetter(argv[Array][Char]) == true){
 				while (ConvertLib::isLetter(argv[Array][Char + counter]) == true){
 					counter++;
 				}
-				std::cout << counter << " + " << argv[Array][Char] << std::endl;
+				if (verbose) {
+					std::cout << counter << " + " << argv[Array][Char] << std::endl;
+					std::cout << "here " << counter << " " << argv[Array][Char] << std::endl;
+				}
 				if (counter > 1){
-					if (ConvertLib::isLetter(argv[Array][Char-1]) == false && argv[Array][Char-1] != '-' && argv[Array][Char-2] != '-'){
-						std::cerr << "Syntax Error: options missing '--' ?" << std::endl;
-						std::exit(6);
+					if (ConvertLib::isLetter(argv[Array][Char-1]) == false){
+						if (argv[Array][Char-1] != '-' || argv[Array][Char-2] != '-'){
+							std::cerr << "Syntax Error: options missing '--' ?" << std::endl;
+							std::exit(6);
+						}
 					}
 				}
 				else {
-					if (ConvertLib::isLetter(argv[Array][Char-1]) == false && argv[Array][Char - 1] != '-'){
+					if (ConvertLib::isLetter(argv[Array][Char-1]) == false && argv[Array][Char-1] != '-'){
 						std::cerr << "Syntax Error: options missing '-' ?" << std::endl;
 						std::exit(6);
 					}
 				}
 				counter = 0;
 			}
-		}
-	}
+		}//close child for loop
+	}//close parent for loop
 }
 
 
@@ -120,7 +132,7 @@ int main(int argc, char *argv[]){
 	//FOR DEBUGGING:
 	//printCommand(argc,argv);
 	//syntax check:
-	//checkSyntax(argc,argv);			//FUNCTION IN PROGRESS
+	checkSyntax(argc,argv);
 	//set option flags:
 	if (argc > 0){
 		for (int i = 1; i < argc; i++){
@@ -222,7 +234,6 @@ int main(int argc, char *argv[]){
 			
 			}//bracket to close child for loop
 		}//bracket to close parent for loop
-		
 		
 		//create interval object using argument values:
 		interval clock = interval(0, 0, 0, editConfig, verbose);
