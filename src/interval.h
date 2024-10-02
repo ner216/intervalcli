@@ -25,11 +25,11 @@ public:
 	void printField(char clock, char field);
 	std::string getOptionStr(std::string);
 	void setAlarm(int h,int m,int s,char dayHalf='0');
-	void runAlarm(bool quiet, bool Hour, bool Min, bool Label=true);
-	void countDown(bool quiet, bool Hour,bool Min,bool Label=true);
+	void runAlarm(bool quiet, bool fullQuiet, bool Hour, bool Min, bool Label=true);
+	void countDown(bool quiet, bool fullQuiet, bool Hour,bool Min,bool Label=true);
 	void setClock(int h,int m,int s,char dayHalf='0');
 	void syncClock();
-	int stopwatch(bool quiet, bool Hour,bool Min,bool Label=true);
+	int stopwatch(bool quiet, bool fullQuiet, bool Hour,bool Min,bool Label=true);
 	void playAlarm() const;
 	bool getConfWorldClock() const;
 };

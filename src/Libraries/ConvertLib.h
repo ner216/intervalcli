@@ -10,7 +10,8 @@ namespace ConvertLib {
 	char lower(char i);
 	bool isDigit(char val);
 	int powTen(int n);
-	int charToInt(char val[]);
+	int charToInt(char digit);
+	int charArrayToInt(char val[]);
 	char intToChar(int num);
 	int abs(int num);
 	int timeMod(std::string);

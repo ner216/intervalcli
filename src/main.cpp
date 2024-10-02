@@ -44,6 +44,56 @@ void repair(){
 	
 }
 
+int* interpretTime(char val[]){
+	int count = 0;
+	int time[] = {0,0,0};
+	int *data = &time[0];
+	int h = 0;
+	int m = 0;
+	int s = 0;
+
+	for (int Char = 0; sizeof(&val)/sizeof(char); Char++){
+		if (val[Char] == 'S' && val[Char+1] == 'H' && val[Char+2] == 'E' && val[Char+3] == 'L' && val[Char+4] == 'L'){
+			break;
+		}
+		if (ConvertLib::isDigit(val[Char]) == true && ConvertLib::isDigit(val[Char-1]) == false){
+			if (ConvertLib::isDigit(val[Char+1]) == true){
+				if (h == 0){
+					h = (ConvertLib::charToInt(val[Char]) * 10) + (ConvertLib::charToInt(val[Char+1]));
+				}
+				else if (h != 0 && m == 0){
+					m = (ConvertLib::charToInt(val[Char]) * 10) + (ConvertLib::charToInt(val[Char+1]));
+				}
+				else if (h != 0 && m != 0 && s == 0){
+					s = (ConvertLib::charToInt(val[Char]) * 10) + (ConvertLib::charToInt(val[Char+1]));
+				}
+				else {
+					std::cerr << "Error: Invalid time input for alarm large digit [main::interpretTime]" << std::endl;
+				}
+			}
+			else {
+				if (h == 0){
+					h = (ConvertLib::charToInt(val[Char]));
+				}
+				else if (h != 0 && m == 0){
+					m = (ConvertLib::charToInt(val[Char]));
+				}
+				else if (h != 0 && m != 0 && s == 0){
+					s = (ConvertLib::charToInt(val[Char]));
+				}
+				else {
+					std::cerr << "Error: Invalid time input for alarm small digit [main::interpretTime]" << std::endl;
+				}
+			}
+		}
+	}
+	time[0] = h;
+	time[1] = m;
+	time[2] = s;
+	
+	return data;
+}
+
 void printCommand(int argc, char *argv[]){
 	for (int Array = 0; Array < argc; Array++){
 		for (int Char = 0; Char < sizeof(*argv)/sizeof(char); Char++){
@@ -63,6 +113,7 @@ void checkSyntax(int argc, char *argv[]){
 	bool longOption = false;
 	bool badOption = false;		
 	bool badLongOption = false;	
+	bool hasColon = false;
 	int counter = 0;
 
 	for (int Array = 1; Array < argc; Array++){
@@ -126,6 +177,7 @@ int main(int argc, char *argv[]){
 	int opCounter = 1;
 	int modeCounter = 2;
 	//initialize switch variables:
+	bool timeSet = false;
 	bool quiet = false;
 	bool fullQuiet = false;
 	bool printTime = false;
@@ -169,7 +221,6 @@ int main(int argc, char *argv[]){
 						}
 						
 						if (argv[i][x + opCounter] == 'q'){
-							fullQuiet = true;
 							quiet = true;
 						}
 						else if (argv[i][x + opCounter] == 'v'){
@@ -233,23 +284,37 @@ int main(int argc, char *argv[]){
 				modeCounter = 2;
 				}	//closing mod if statement
 				
-				if (ConvertLib::isDigit(argv[i][x]) == true){
+				if (ConvertLib::isDigit(argv[i][x]) == true && ConvertLib::isDigit(argv[i][x-1]) == false && argv[i][x-1] != ':' && timeSet == false){
 					if (printTime == true){
-						if (clockMode == 0){
-							clockMode = ConvertLib::charToInt(argv[i]);
+						if (argv[i][x] == '1' && argv[i][x+1] == '2'){
+							clockMode = 12;
+							timeSet = true;
+						}
+						else if (argv[i][x] == '2' && argv[i][x+1] == '4'){
+							clockMode = 24;
+							timeSet = true;
 						}
 					}
 					else {
-						if (secVal == 0 && minVal == 0 && hourVal == 0){
-							if (secOP == true){
-								secVal = ConvertLib::charToInt(argv[i]);
-							}
-							else if (minOP == true){
-								minVal = ConvertLib::charToInt(argv[i]);
-							}
-							else if (hourOP == true){
-								hourVal = ConvertLib::charToInt(argv[i]);
-							}
+						int* time;
+						time = interpretTime(&argv[i][x]);
+						if (hourOP == true){
+							hourVal = time[0];
+							timeSet = true;
+						}
+						else if (minOP == true){
+							minVal = time[0];
+							timeSet = true;
+						}
+						else if (secOP == true){
+							secVal = time[0];
+							timeSet = true;
+						}
+						else {
+							hourVal = time[0];
+							minVal = time[1];
+							secVal = time[2];
+							timeSet = true;
 						}
 					}
 				}//close isdigit if statement
@@ -279,20 +344,14 @@ int main(int argc, char *argv[]){
 		if (timer == true){
 			clock.setClock(hourVal, minVal, secVal);
 			clock.setAlarm(0,0,0);
-			if (quiet == true){
-				std::cout << "Timer running..." << std::endl;
-			}
-			clock.countDown(fullQuiet, dispH, dispM);
+			clock.countDown(quiet, fullQuiet, dispH, dispM);
 		}
 		else if (stopwatch == true){
 			int secondsElapsed = 0;
 			clock.setClock(hourVal, minVal, secVal);
 			
-			if (quiet == true){
-				std::cout << "Timer running..." << std::endl;
-			}
 			//FIX THIS later; find a way to return seconds elapsed when program closes.
-			secondsElapsed = clock.stopwatch(fullQuiet, dispH, dispM);
+			secondsElapsed = clock.stopwatch(quiet, fullQuiet, dispH, dispM);
 			
 			if (fullQuiet == true){
 				std::cout << secondsElapsed << std::endl;
@@ -300,34 +359,15 @@ int main(int argc, char *argv[]){
 		}
 		else if (alarm == true){
 			clock.syncClock();
-			std::cout << "Enter alarm time(hr min) >";
-			std::cin >> hourVal;
-			std::cin >> minVal;
-			if (clock.getConfWorldClock() == false){
-				std::cout << "AM or PM: ";
-				std::cin >> dayHalfSTR;
-				if (dayHalfSTR == "AM" || dayHalfSTR == "am" || dayHalfSTR == "a" || dayHalfSTR == "A"){
-					dayHalf = 'A';
-				}
-				else if (dayHalfSTR == "PM" || dayHalfSTR == "pm" || dayHalfSTR == "p" || dayHalfSTR == "P"){
-					dayHalf = 'P';
-				}
-				else {
-					std::cerr << "Error: invalid input for dayHalf [main]" << std::endl;
-					return 1;
-				}
-			}
 			if (verbose){
 				std::cout << "[v] -> HOURVAL: " << hourVal  << " [main]" << std::endl;
 				std::cout << "[v] -> MINVAL: " << minVal  << " [main] " << std::endl;
+				std::cout << "[v] -> SECVAL: " << secVal << " [main] " << std::endl;
 			}
 			if (clock.getConfWorldClock() == true){
 				if (hourVal >= 0 && hourVal < 24 && minVal >= 0 && minVal < 60){
 					clock.setAlarm(hourVal,minVal,secVal,'0');
-					if (quiet == true){
-						std::cout << "Timer running..." << std::endl;
-					}
-					clock.runAlarm(fullQuiet, dispH, dispM);
+					clock.runAlarm(quiet, fullQuiet, dispH, dispM);
 				}
 				else {
 					std::cerr << "Error: invalid input time [main]" << std::endl;
@@ -337,10 +377,7 @@ int main(int argc, char *argv[]){
 			else if (clock.getConfWorldClock() == false){
 				if (hourVal > 0 && hourVal <= 12 && minVal >= 0 && minVal < 60){
 					clock.setAlarm(hourVal,minVal,secVal,dayHalf);
-					if (quiet == true){
-						std::cout << "Timer running..." << std::endl;
-					}
-					clock.runAlarm(fullQuiet, dispH, dispM);
+					clock.runAlarm(quiet, fullQuiet, dispH, dispM);
 				}
 				else {
 					std::cerr << "Error: invalid input time [main]" << std::endl;

@@ -87,9 +87,9 @@ void Msg::help(){
 }
 
 void Msg::version(){
-	std::cout << "intervalcli 2.0.0" << std::endl
+	std::cout << "intervalcli 2.3.0" << std::endl
 	<< "Date Originally Published: 8-17-24" << std::endl
-	<< "Date of most recent update: 9-19-24" << std::endl
+	<< "Date of most recent update: 10-2-24" << std::endl
 	<< "Publisher: Nolan Provencher" << std::endl;
 }
 
