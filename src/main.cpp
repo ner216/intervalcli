@@ -285,11 +285,18 @@ int main(int argc, char *argv[]){
 			clock.countDown(fullQuiet, dispH, dispM);
 		}
 		else if (stopwatch == true){
+			int secondsElapsed = 0;
 			clock.setClock(hourVal, minVal, secVal);
+			
 			if (quiet == true){
 				std::cout << "Timer running..." << std::endl;
 			}
-			clock.stopwatch(fullQuiet, dispH, dispM);
+			//FIX THIS later; find a way to return seconds elapsed when program closes.
+			secondsElapsed = clock.stopwatch(fullQuiet, dispH, dispM);
+			
+			if (fullQuiet == true){
+				std::cout << secondsElapsed << std::endl;
+			}
 		}
 		else if (alarm == true){
 			clock.syncClock();

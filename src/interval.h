@@ -29,7 +29,7 @@ public:
 	void countDown(bool quiet, bool Hour,bool Min,bool Label=true);
 	void setClock(int h,int m,int s,char dayHalf='0');
 	void syncClock();
-	void stopwatch(bool quiet, bool Hour,bool Min,bool Label=true);
+	int stopwatch(bool quiet, bool Hour,bool Min,bool Label=true);
 	void playAlarm() const;
 	bool getConfWorldClock() const;
 };

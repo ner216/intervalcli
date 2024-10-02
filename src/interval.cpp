@@ -214,7 +214,7 @@ void interval::runAlarm(bool quiet, bool dispH, bool dispM, bool Label){
 	while (true){
 		if (quiet == false){
 			if (this->verbose == false){
-			system("clear");
+				system("clear");
 			}
 			std::cout << "Current ";
 			interval::print('c', dispH, dispM, Label);
@@ -231,8 +231,10 @@ void interval::runAlarm(bool quiet, bool dispH, bool dispM, bool Label){
 			if (diffM == 0){
 				if (diffS == 0 || diffS == 1){
 					if (this->currClock->dayHalf == this->alarmClock->dayHalf){
-						std::cout << "Alarm time reached" << std::endl;
-						playAlarm();
+						if (quiet == false){
+							std::cout << "Alarm time reached" << std::endl;
+							playAlarm();
+						}
 						break;
 					}
 				}
@@ -247,8 +249,8 @@ void interval::runAlarm(bool quiet, bool dispH, bool dispM, bool Label){
 void interval::countDown(bool quiet, bool Hour, bool Min, bool Label){
 	if (quiet == false){
 		if (this->verbose){
-		sleep(3);
-	}
+			sleep(3);
+		}
 	}
 	bool alarm = false;
 
@@ -258,8 +260,10 @@ void interval::countDown(bool quiet, bool Hour, bool Min, bool Label){
 			if (this->verbose){
 				std::cout << "[v] -> Alarm time reached [interval::countDown]" << std::endl;
 			}
-			std::cout << "Time complete!" << std::endl;
-			interval::playAlarm();
+			if (quiet == false){
+				std::cout << "Time complete!" << std::endl;
+				interval::playAlarm();
+			}
 			break;
 		}
 
@@ -275,17 +279,22 @@ void interval::countDown(bool quiet, bool Hour, bool Min, bool Label){
 	}
 }
 
-void interval::stopwatch(bool quiet, bool Hour, bool Min, bool Label){
+int interval::stopwatch(bool quiet, bool Hour, bool Min, bool Label){
+	int seconds = 0;
+	
 	while (true){
 		if (quiet == false){
-		if (this->verbose == false){
-			std::system("clear");
-		}
-		interval::print('c', Hour, Min, Label);
+			if (this->verbose == false){
+				std::system("clear");
+			}
+			interval::print('c', Hour, Min, Label);
 		}
 		this->currClock->incSec();
 		sleep(1.1);
+		seconds++;
 	}
+	
+	return seconds;
 }
 
 bool interval::getConfWorldClock() const {
