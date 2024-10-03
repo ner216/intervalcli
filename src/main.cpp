@@ -48,6 +48,9 @@ int* interpretTime(char val[]){
 	int count = 0;
 	int time[] = {0,0,0};
 	int *data = &time[0];
+	bool hSet = false;
+	bool mSet = false;
+	bool sSet = false;
 	int h = 0;
 	int m = 0;
 	int s = 0;
@@ -58,28 +61,34 @@ int* interpretTime(char val[]){
 		}
 		if (ConvertLib::isDigit(val[Char]) == true && ConvertLib::isDigit(val[Char-1]) == false){
 			if (ConvertLib::isDigit(val[Char+1]) == true){
-				if (h == 0){
+				if (hSet == false){
 					h = (ConvertLib::charToInt(val[Char]) * 10) + (ConvertLib::charToInt(val[Char+1]));
+					hSet = true;
 				}
-				else if (h != 0 && m == 0){
+				else if (hSet == true && mSet == false){
 					m = (ConvertLib::charToInt(val[Char]) * 10) + (ConvertLib::charToInt(val[Char+1]));
+					mSet = true;
 				}
-				else if (h != 0 && m != 0 && s == 0){
+				else if (hSet == true && mSet == true && sSet == false){
 					s = (ConvertLib::charToInt(val[Char]) * 10) + (ConvertLib::charToInt(val[Char+1]));
+					sSet = true;
 				}
 				else {
 					std::cerr << "Error: Invalid time input for alarm large digit [main::interpretTime]" << std::endl;
 				}
 			}
 			else {
-				if (h == 0){
+				if (hSet == false){
 					h = (ConvertLib::charToInt(val[Char]));
+					hSet = true;
 				}
-				else if (h != 0 && m == 0){
+				else if (hSet == true && mSet == false){
 					m = (ConvertLib::charToInt(val[Char]));
+					mSet = true;
 				}
-				else if (h != 0 && m != 0 && s == 0){
+				else if (hSet == true && mSet == true && sSet == false){
 					s = (ConvertLib::charToInt(val[Char]));
+					sSet = true;
 				}
 				else {
 					std::cerr << "Error: Invalid time input for alarm small digit [main::interpretTime]" << std::endl;
