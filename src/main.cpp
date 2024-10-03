@@ -114,6 +114,7 @@ void checkSyntax(int argc, char *argv[]){
 	bool badOption = false;		
 	bool badLongOption = false;	
 	bool hasColon = false;
+	bool formatOption = false;
 	int counter = 0;
 
 	for (int Array = 1; Array < argc; Array++){
@@ -122,6 +123,9 @@ void checkSyntax(int argc, char *argv[]){
 				break;
 			}
 			if (ConvertLib::isLetter(argv[Array][Char]) == true){
+				if (argv[Array][Char] == ':'){
+					hasColon = true;
+				}
 				if (ConvertLib::lower(argv[Array][Char]) == 'p' && ConvertLib::lower(argv[Array][Char+1]) == 'r' && ConvertLib::lower(argv[Array][Char+2]) == 'i' && ConvertLib::lower(argv[Array][Char+3]) == 'n' && ConvertLib::lower(argv[Array][Char+4]) == 't'){
 					longOption = true;
 				}
