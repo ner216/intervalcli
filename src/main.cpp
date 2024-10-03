@@ -204,6 +204,8 @@ int main(int argc, char *argv[]){
 	bool hourOP = false;
 	bool dispH = false;
 	bool dispM = false;
+	bool am = false;
+	bool pm = false;
 	//clock value variables:
 	int clockMode = 0;		//stores 12h or 24h
 	int minVal = 0;
@@ -212,7 +214,7 @@ int main(int argc, char *argv[]){
 	//Variables for mode functions:
 	std::string dayHalfSTR;
 	char field = '0';	//used for print option
-	char dayHalf;		//am or pm
+	char dayHalf = '0';		//am or pm
 	//Used to modify timezone for main print option.
 	int worldClock = true;
 	
@@ -224,6 +226,7 @@ int main(int argc, char *argv[]){
 	if (argc > 0){
 		for (int i = 1; i < argc; i++){
 			for (int x = 0; x < sizeof(argv[i])/sizeof(char); x++){
+				//REGULAR OPTIONS
 				if (argv[i][x] == '-' && argv[i][x+1] != '-' && argv[i][x-1] != '-'){
 					while (ConvertLib::isLetter(argv[i][x + opCounter]) == true){
 						if (argv[i][x+opCounter] == 'F' && argv[i][x+opCounter+1] == 'Q'){
@@ -232,7 +235,12 @@ int main(int argc, char *argv[]){
 						if (argv[i][x+opCounter] == 'D' && argv[i][x+opCounter+1] == 'H'){
 							dispH = true;
 						}
-						
+						if (argv[i][x+opCounter] == 'A' && argv[i][x+opCounter+1] == 'M'){
+							dayHalf = 'A';
+						}
+						if (argv[i][x+opCounter] == 'P' && argv[i][x+opCounter+1] == 'M'){
+							dayHalf = 'P';
+						}
 						if (argv[i][x + opCounter] == 'q'){
 							quiet = true;
 						}
@@ -266,7 +274,7 @@ int main(int argc, char *argv[]){
 					
 					opCounter = 1;
 				}	//closing option if statement
-				
+				//LONG OPTIONS
 				if (argv[i][x] == '-' && argv[i][x+1] == '-'){
 					while (ConvertLib::isLetter(argv[i][x + modeCounter]) == true){
 						if (argv[i][x + modeCounter] == 'h' && argv[i][x + 1 + modeCounter] == 'e'){
@@ -377,7 +385,12 @@ int main(int argc, char *argv[]){
 				std::cout << "[v] -> MINVAL: " << minVal  << " [main] " << std::endl;
 				std::cout << "[v] -> SECVAL: " << secVal << " [main] " << std::endl;
 			}
+			
 			if (clock.getConfWorldClock() == true){
+				if (dayHalf != '0'){
+					std::cerr << "Error: dayHalf option used while worldClock(24 Hour) is true [main]" << std::endl;
+					exit(1);
+				}
 				if (hourVal >= 0 && hourVal < 24 && minVal >= 0 && minVal < 60){
 					clock.setAlarm(hourVal,minVal,secVal,'0');
 					clock.runAlarm(quiet, fullQuiet, dispH, dispM);

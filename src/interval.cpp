@@ -190,6 +190,9 @@ void interval::setAlarm(int h, int m, int s, char dayHalf){		//dayHalf can be 'A
 		if (h <= 12 && h >= 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
 			validInput = true;
 		}
+		if (dayHalf == '0'){
+			dayHalf = this->currClock->dayHalf;
+		}
 	}
 	
 	if (validInput == true){
