@@ -178,37 +178,73 @@ void interval::syncClock(){	//make adjustments later for time zone
 	}
 }
 
-void interval::setAlarm(int h, int m, int s, char dayHalf){		//dayHalf can be 'A' or 'P'
+void interval::setAlarm(int h, int m, int s, char dayHalf, bool advanceCurrClock){		//dayHalf can be 'A' or 'P'
 	bool validInput = false;	//flag switched when input is validated.
 	
-	if (this->config->worldClock == "true"){
-		if (h < 24 && h >= 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
-			validInput = true;
+	if (advanceCurrClock == true){
+		//Sync alarmClock with currClock and add argument values
+		this->alarmClock->hour = h + this->currClock->hour;
+		this->alarmClock->min = m + this->currClock->min;
+		this->alarmClock->sec = s + this->currClock->sec;
+		this->alarmClock->dayHalf = this->currClock->dayHalf;
+		
+		//Convert time to valid value if values are out of range
+		if (this->alarmClock->sec > 59){
+			this->alarmClock->min = this->alarmClock->min + (this->alarmClock->sec / 60);
+			this->alarmClock->sec = this->alarmClock->sec % 60;
+		}
+		if (this->alarmClock->min > 59){
+			this->alarmClock->hour = this->alarmClock->hour + (this->alarmClock->min / 60);
+			this->alarmClock->min = this->alarmClock->min % 60;
+		}
+		
+		if (this->config->worldClock == "false"){
+			if (this->alarmClock->hour > 12){
+				this->alarmClock->hour = this->alarmClock->hour % 12;
+				if (this->alarmClock->dayHalf == 'A'){
+					this->alarmClock->dayHalf = 'P';
+				}
+				else if (this->alarmClock->dayHalf == 'P'){
+					this->alarmClock->dayHalf = 'A';
+				}
+			}
+		}
+		else {
+			if (this->alarmClock->hour > 23){
+				this->alarmClock->hour = this->alarmClock->hour % 23;
+			}
 		}
 	}
 	else {
-		if (h <= 12 && h >= 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
-			validInput = true;
+		if (this->config->worldClock == "true"){
+			if (h < 24 && h >= 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
+				validInput = true;
+			}
 		}
-		if (dayHalf == '0'){
-			dayHalf = this->currClock->dayHalf;
+		else {
+			if (h <= 12 && h >= 0 && m < 60 && m >= 0 && s < 60 && s >= 0){
+				validInput = true;
+			}
+			if (dayHalf == '0'){
+				dayHalf = this->currClock->dayHalf;
+			}
 		}
-	}
-	
-	if (validInput == true){
-		this->alarmClock->hour = h;
-		this->alarmClock->min = m;
-		this->alarmClock->sec = s;
-		this->alarmClock->dayHalf = dayHalf;
-		if (this->verbose){
-			std::cout << "[v] -> Alarm time set successfully [interval::setAlarm]" << std::endl;
-			std::cout << "[v] -> Hour: " << h << " Min: " << m << " Sec: " << s << " DayHalf: " << dayHalf << " [interval::setAlarm]" << std::endl;
+		
+		if (validInput == true){
+			this->alarmClock->hour = h;
+			this->alarmClock->min = m;
+			this->alarmClock->sec = s;
+			this->alarmClock->dayHalf = dayHalf;
+			if (this->verbose){
+				std::cout << "[v] -> Alarm time set successfully [interval::setAlarm]" << std::endl;
+				std::cout << "[v] -> Hour: " << h << " Min: " << m << " Sec: " << s << " DayHalf: " << dayHalf << " [interval::setAlarm]" << std::endl;
+			}
 		}
-	}
-	else {
-		std::cerr << "Error [4]: Input time is invalid [interval::setAlarm]" << std::endl;
-		std::exit(4);
-	}	
+		else {
+			std::cerr << "Error [4]: Input time is invalid [interval::setAlarm]" << std::endl;
+			std::exit(4);
+		}	
+	}//close else for advanceCurrClock statement
 }
 
 void interval::runAlarm(bool quiet, bool fullQuiet, bool dispH, bool dispM, bool Label){

@@ -385,29 +385,34 @@ int main(int argc, char *argv[]){
 				std::cout << "[v] -> MINVAL: " << minVal  << " [main] " << std::endl;
 				std::cout << "[v] -> SECVAL: " << secVal << " [main] " << std::endl;
 			}
-			
-			if (clock.getConfWorldClock() == true){
-				if (dayHalf != '0'){
-					std::cerr << "Error: dayHalf option used while worldClock(24 Hour) is true [main]" << std::endl;
-					exit(1);
-				}
-				if (hourVal >= 0 && hourVal < 24 && minVal >= 0 && minVal < 60){
-					clock.setAlarm(hourVal,minVal,secVal,'0');
-					clock.runAlarm(quiet, fullQuiet, dispH, dispM);
-				}
-				else {
-					std::cerr << "Error: invalid input time [main]" << std::endl;
-					return 1;
-				}
+			if (secOP == true || minOP == true || hourOP == true){
+				clock.setAlarm(hourVal,minVal,secVal,'0',true); //last argument is for advanceCurrClock variable
+				clock.runAlarm(quiet, fullQuiet, dispH, dispM);
 			}
-			else if (clock.getConfWorldClock() == false){
-				if (hourVal > 0 && hourVal <= 12 && minVal >= 0 && minVal < 60){
-					clock.setAlarm(hourVal,minVal,secVal,dayHalf);
-					clock.runAlarm(quiet, fullQuiet, dispH, dispM);
+			else {
+				if (clock.getConfWorldClock() == true){
+					if (dayHalf != '0'){
+						std::cerr << "Error: dayHalf option used while worldClock(24 Hour) is true [main]" << std::endl;
+						exit(1);
+					}
+					if (hourVal >= 0 && hourVal < 24 && minVal >= 0 && minVal < 60){
+						clock.setAlarm(hourVal,minVal,secVal,'0');
+						clock.runAlarm(quiet, fullQuiet, dispH, dispM);
+					}
+					else {
+						std::cerr << "Error: invalid input time [main]" << std::endl;
+						return 1;
+					}
 				}
-				else {
-					std::cerr << "Error: invalid input time [main]" << std::endl;
-					return 1;
+				else if (clock.getConfWorldClock() == false){
+					if (hourVal > 0 && hourVal <= 12 && minVal >= 0 && minVal < 60){
+						clock.setAlarm(hourVal,minVal,secVal,dayHalf);
+						clock.runAlarm(quiet, fullQuiet, dispH, dispM);
+					}
+					else {
+						std::cerr << "Error: invalid input time [main]" << std::endl;
+						return 1;
+					}
 				}
 			}
 			

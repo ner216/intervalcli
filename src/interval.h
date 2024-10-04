@@ -24,7 +24,7 @@ public:
 	void printTime(char* argv[], int argc, char field='0', int clockMode=0);
 	void printField(char clock, char field);
 	std::string getOptionStr(std::string);
-	void setAlarm(int h,int m,int s,char dayHalf='0');
+	void setAlarm(int h,int m,int s,char dayHalf='0',bool advanceCurrClock=false);
 	void runAlarm(bool quiet, bool fullQuiet, bool Hour, bool Min, bool Label=true);
 	void countDown(bool quiet, bool fullQuiet, bool Hour,bool Min,bool Label=true);
 	void setClock(int h,int m,int s,char dayHalf='0');
