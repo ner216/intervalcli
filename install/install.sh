@@ -70,6 +70,11 @@ installBin(){
 	#copy binary to bin:
 	cp $srcFile /usr/bin/
 	cd ..
+	echo "Removing build directory..."
+	rm -r build
+	if [ -d build ]; then
+		echo "Error: Build directory could not be deleted"
+	fi
 	if [ -f $alarmFile ]; then
 		cp $alarmFile /usr/share/sounds/alsa/
 	else
@@ -183,17 +188,18 @@ if [ $(id -u) == 0 ]; then
 				echo "Error: unknown distrobution! exiting!"
 				exit 3
 			fi
+			
+			echo "Removeing config file..."
+			rm /etc/IntervalConfig.conf
+			echo "Removeing audio sound effect..."
+			rm /usr/share/sounds/alsa/alarm.mp3
+			echo "Removing binaries & scripts..."
+			rm /usr/bin/$notificationScript
+			rm /usr/bin/$srcFile
+			echo "Removing manual..."
+			rm /usr/share/man/man1/$manual
 		fi
 		
-		echo "Removeing config file..."
-		rm /etc/IntervalConfig.conf
-		echo "Removeing audio sound effect..."
-		rm /usr/share/sounds/alsa/alarm.mp3
-		echo "Removing binaries & scripts..."
-		rm /usr/bin/$notificationScript
-		rm /usr/bin/$srcFile
-		echo "Removing manual..."
-		rm /usr/share/man/man1/$manual
 		echo "Done"
 	elif [ $install == true ]; then
 		printf "This action will: \n"
