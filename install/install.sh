@@ -121,7 +121,7 @@ installDepAPT(){
 	printf 'Updating repos...\n'
 	apt update
 	printf 'Installing [mpg123,CMAKE,g++,libnotify]...\n'
-	apt install cmake g++ libnotify-dev mpg123.x86_64
+	apt install cmake g++ libnotify-dev mpg123
 
 }
 
